@@ -2,8 +2,9 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Der Horcher - Engineering That Connects</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <style>
         * {
             margin: 0;
@@ -12,21 +13,22 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #4A5FD9 0%, #2E3B8E 100%);
             min-height: 100vh;
-            padding: 20px 60px;
+            padding: 24px;
         }
 
         .main-container {
-            background: #1a1f2e;
-            border-radius: 24px;
+            background: linear-gradient(180deg, #0f1a2f 0%, #0b1324 100%);
+            border-radius: 28px;
             overflow: hidden;
         }
 
-        /* Header */
+        /* ================= HEADER ================= */
+
         header {
-            padding: 20px 40px;
+            padding: 28px 80px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
@@ -39,25 +41,10 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
-            color: white;
-            font-size: 16px;
+            gap: 14px;
+            color: #67c7ff;
             font-weight: 600;
-        }
-
-        .logo-icon {
-            width: 32px;
-            height: 32px;
-            background: #2a3f5f;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo-icon img {
-            width: 24px;
-            height: 24px;
+            font-size: 18px;
         }
 
         .nav-links {
@@ -67,50 +54,37 @@
         }
 
         .nav-links a {
-            color: #ffffff;
+            color: white;
             text-decoration: none;
             font-size: 16px;
-            font-weight: 600;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #4A9FFF;
+            font-weight: 500;
         }
 
         .contact-btn {
             background: white;
-            color: #1a1f2e;
+            color: black;
             padding: 12px 32px;
             border-radius: 50px;
-            text-decoration: none;
             font-weight: 600;
-            font-size: 16px;
-            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
         }
 
-        .contact-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
-        }
+        /* ================= HERO ================= */
 
-        /* Hero Section */
         .hero {
-            padding: 80px 80px 40px 80px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 60px;
-            max-width: 1200px;
-            margin: 0 auto;
+            padding: 90px 80px 40px 80px;
+            gap: 80px;
         }
 
+        /* LINKER TEXTBLOCK */
         .hero-content {
-            flex: 1;
-            max-width: 540px;
+            width: 520px;
             display: flex;
             flex-direction: column;
-            gap: 28px; /* einheitliche Abstände */
+            gap: 34px;
         }
 
         .hero h1 {
@@ -121,169 +95,152 @@
         }
 
         .hero-description {
-            color: #B8C1E0;
-            font-size: 16px;
-            line-height: 1.6;
+            color: #b7c3e6;
+            font-size: 18px;
+            line-height: 1.7;
         }
 
         .hero-buttons {
             display: flex;
-            gap: 24px;
+            gap: 22px;
             align-items: center;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #D946EF 0%, #A855F7 100%);
+            background: linear-gradient(135deg, #d946ef 0%, #a855f7 100%);
             color: white;
-            padding: 18px 40px;
+            padding: 18px 42px;
             border-radius: 50px;
-            text-decoration: none;
             font-weight: 600;
             font-size: 16px;
-            transition: transform 0.2s, box-shadow 0.2s;
-            display: inline-block;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(217, 70, 239, 0.4);
+            text-decoration: none;
         }
 
         .btn-secondary {
             color: white;
-            text-decoration: none;
             font-weight: 600;
             font-size: 16px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: gap 0.3s;
+            text-decoration: none;
         }
 
-        .btn-secondary:hover {
-            gap: 12px;
-        }
-
+        /* RECHTES BILD */
         .hero-image {
-            flex: 1;
+            width: 460px;
             display: flex;
-            justify-content: flex-end;
-            align-items: center;
+            justify-content: center;
         }
 
         .hero-image img {
             width: 100%;
-            max-width: 420px; /* etwas größer, aber im Layout */
-            height: auto;
         }
 
-        /* Feature Cards */
+        /* ================= FEATURES ================= */
+
         .features {
             display: flex;
-            gap: 30px;
-            padding: 0 80px 60px 80px;
-            max-width: 1200px;
-            margin: 0 auto;
+            gap: 40px;
+            padding: 0 80px 80px 80px;
         }
 
         .feature-card {
-            background: #162132;
-            border-radius: 24px;
-            padding: 24px 28px;
-            flex: 1;
+            background: rgba(255,255,255,0.04);
+            border-radius: 26px;
+            padding: 26px 30px;
+            width: 340px;
         }
 
         .feature-card h3 {
             color: white;
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 8px;
+            font-size: 20px;
+            margin-bottom: 12px;
         }
 
         .feature-card p {
-            color: #B8C1E0;
-            font-size: 13px;
-            line-height: 1.5;
+            color: #b7c3e6;
+            font-size: 14px;
+            line-height: 1.6;
         }
 
-        /* Responsive */
-        @media (max-width: 1024px) {
-            body {
-                padding: 10px 20px;
-            }
+        /* ================= RESPONSIVE ================= */
 
-            header {
-                padding: 16px 24px;
-            }
-
+        @media (max-width: 1100px) {
             .hero {
                 flex-direction: column;
                 align-items: flex-start;
-                padding: 60px 24px 32px 24px;
             }
 
             .hero-image {
-                justify-content: center;
-                width: 100%;
-            }
-
-            .hero-image img {
-                max-width: 320px;
+                margin-top: 40px;
+                width: 320px;
             }
 
             .features {
                 flex-direction: column;
-                padding: 0 24px 40px 24px;
             }
         }
+
     </style>
 </head>
+
 <body>
-    <div class="main-container">
-        <header>
-            <nav>
-                <div class="logo">
-                    <div class="logo-icon">
-                        <img src="logo-icon.png" alt="Logo">
-                    </div>
-                    <span>Der Horcher</span>
-                </div>
-                <ul class="nav-links">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#project">Project</a></li>
-                    <li><a href="#team">Our Team</a></li>
-                </ul>
-                <a href="#contact" class="contact-btn">Contact</a>
-            </nav>
-        </header>
 
-        <section class="hero" id="home">
-            <div class="hero-content">
-                <h1>Engineering That Connects</h1>
-                <p class="hero-description">
-                    A next-generation communication platform that bridges embedded engineering with modern web technology. Designed for seamless UART communication, real-time data visualization, and intuitive browser-based control.
-                </p>
-                <div class="hero-buttons">
-                    <a href="#dashboard" class="btn-primary">Open Dashboard</a>
-                    <a href="#learn" class="btn-secondary">Learn more →</a>
-                </div>
-            </div>
-            <div class="hero-image">
-                <img src="walkie-talkie.png" alt="Walkie Talkie">
-            </div>
-        </section>
+<div class="main-container">
 
-        <section class="features" id="features">
-            <div class="feature-card">
-                <h3>UART Communication</h3>
-                <p>Reliable, low-latency serial communication for real-time interaction between your device and the web interface.</p>
+    <header>
+        <nav>
+            <div class="logo">Der Horcher</div>
+
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Features</a></li>
+                <li><a href="#">Project</a></li>
+                <li><a href="#">Our Team</a></li>
+            </ul>
+
+            <a href="#" class="contact-btn">Contact</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Engineering That Connects</h1>
+
+            <p class="hero-description">
+                A next-generation communication platform that bridges embedded engineering
+                with modern web technology. Designed for seamless UART communication,
+                real-time data visualization, and intuitive browser-based control.
+            </p>
+
+            <div class="hero-buttons">
+                <a href="#" class="btn-primary">Open Dashboard</a>
+                <a href="#" class="btn-secondary">Learn more →</a>
             </div>
-            <div class="feature-card">
-                <h3>System Monitoring</h3>
-                <p>Live insights into device status, signal strength, uptime, and performance metrics.</p>
-            </div>
-        </section>
-    </div>
+        </div>
+
+        <div class="hero-image">
+            <img src="walkie-talkie.png" alt="Walkie Talkie">
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="feature-card">
+            <h3>UART Communication</h3>
+            <p>
+                Reliable, low-latency serial communication for real-time
+                interaction between your device and the web interface.
+            </p>
+        </div>
+
+        <div class="feature-card">
+            <h3>System Monitoring</h3>
+            <p>
+                Live insights into device status, signal strength,
+                uptime, and performance metrics.
+            </p>
+        </div>
+    </section>
+
+</div>
+
 </body>
 </html>

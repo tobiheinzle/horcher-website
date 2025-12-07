@@ -2,8 +2,9 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Der Horcher - Engineering That Connects</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <style>
         * {
             margin: 0;
@@ -12,7 +13,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #4A5FD9 0%, #2E3B8E 100%);
             min-height: 100vh;
             padding: 20px 60px;
@@ -24,7 +25,8 @@
             overflow: hidden;
         }
 
-        /* Header */
+        /* ================= HEADER ================= */
+
         header {
             padding: 20px 40px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -81,7 +83,7 @@
             text-decoration: none;
             font-weight: 600;
             font-size: 16px;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: 0.2s;
         }
 
         .contact-btn:hover {
@@ -89,18 +91,23 @@
             box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
         }
 
-        /* Hero Section */
+        /* ================= HERO ================= */
+
         .hero {
-            padding: 80px 60px 0 80px;
+            position: relative;
+            padding: 120px 80px 60px 120px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            gap: 60px;
+            max-width: 1400px;
+            margin: 0 auto;
         }
 
         .hero-content {
-            flex: 1;
-            max-width: 600px;
+            max-width: 520px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            z-index: 2;
         }
 
         .hero h1 {
@@ -108,21 +115,18 @@
             font-size: 64px;
             font-weight: 700;
             line-height: 1.1;
-            margin-bottom: 32px;
         }
 
         .hero-description {
             color: #B8C1E0;
             font-size: 16px;
             line-height: 1.6;
-            margin-bottom: 32px;
         }
 
         .hero-buttons {
             display: flex;
             gap: 24px;
             align-items: center;
-            margin-bottom: 40px;
         }
 
         .btn-primary {
@@ -133,8 +137,7 @@
             text-decoration: none;
             font-weight: 600;
             font-size: 16px;
-            transition: transform 0.2s, box-shadow 0.2s;
-            display: inline-block;
+            transition: 0.2s;
         }
 
         .btn-primary:hover {
@@ -157,26 +160,30 @@
             gap: 12px;
         }
 
+        /* ================= HERO IMAGE (FREI) ================= */
+
         .hero-image {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            max-width: 1000px;
+            position: absolute;
+            right: 80px;
+            bottom: -40px;
+            z-index: 1;
+            pointer-events: none;
         }
 
         .hero-image img {
-            width: 100%;
-            max-width: 650px;
+            width: 720px;
+            max-width: none;
             height: auto;
         }
 
-        /* Feature Cards */
+        /* ================= FEATURES ================= */
+
         .features {
             display: flex;
             gap: 30px;
-            padding: 32px 60px 60px 80px;
-            max-width: 700px;
+            padding: 40px 80px 80px 120px;
+            max-width: 680px;
+            margin: 0 auto;
         }
 
         .feature-card {
@@ -199,58 +206,94 @@
             font-size: 13px;
             line-height: 1.5;
         }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 1100px) {
+            .hero-image {
+                position: static;
+                margin-top: 40px;
+                text-align: center;
+            }
+
+            .hero {
+                flex-direction: column;
+                padding: 80px 40px;
+            }
+
+            .features {
+                padding: 40px;
+                flex-direction: column;
+            }
+
+            .hero-image img {
+                width: 100%;
+                max-width: 420px;
+            }
+        }
+
     </style>
 </head>
+
 <body>
     <div class="main-container">
+
         <header>
             <nav>
                 <div class="logo">
                     <div class="logo-icon">
-                        <!-- Platzhalter für dein Logo Icon -->
-                        <img src="logo-icon.png" alt="Logo" style="width: 24px; height: 24px;">
+                        <img src="logo-icon.png" alt="Logo" style="width:24px; height:24px;">
                     </div>
                     <span>Der Horcher</span>
                 </div>
+
                 <ul class="nav-links">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#project">Project</a></li>
-                    <li><a href="#team">Our Team</a></li>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Features</a></li>
+                    <li><a href="#">Project</a></li>
+                    <li><a href="#">Our Team</a></li>
                 </ul>
-                <a href="#contact" class="contact-btn">Contact</a>
+
+                <a href="#" class="contact-btn">Contact</a>
             </nav>
         </header>
 
         <section class="hero">
             <div class="hero-content">
                 <h1>Engineering That Connects</h1>
+
                 <p class="hero-description">
-                    A next-generation communication platform that bridges embedded engineering with modern web technology. Designed for seamless UART communication, real-time data visualization, and intuitive browser-based control.
+                    A next-generation communication platform that bridges embedded engineering with modern web technology.
+                    Designed for seamless UART communication, real-time data visualization, and intuitive browser-based control.
                 </p>
+
                 <div class="hero-buttons">
-                    <a href="#dashboard" class="btn-primary">Open Dashboard</a>
-                    <a href="#learn" class="btn-secondary">
-                        Learn more →
-                    </a>
+                    <a href="#" class="btn-primary">Open Dashboard</a>
+                    <a href="#" class="btn-secondary">Learn more →</a>
                 </div>
             </div>
+
             <div class="hero-image">
-                <!-- Platzhalter für dein Walkie-Talkie Bild -->
                 <img src="walkie-talkie.png" alt="Walkie Talkie">
             </div>
         </section>
 
-        <div class="features">
+        <section class="features">
             <div class="feature-card">
-                <h3>UART Comunication</h3>
-                <p>Reliable, low-latency serial communication for real-time interaction between your device and the web interface.</p>
+                <h3>UART Communication</h3>
+                <p>
+                    Reliable, low-latency serial communication for real-time interaction between your device and the web interface.
+                </p>
             </div>
+
             <div class="feature-card">
                 <h3>System Monitoring</h3>
-                <p>Live insights into device status, signal strength, uptime, and performance metrics.</p>
+                <p>
+                    Live insights into device status, signal strength, uptime, and performance metrics.
+                </p>
             </div>
-        </div>
+        </section>
+
     </div>
 </body>
 </html>

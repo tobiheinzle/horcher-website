@@ -158,18 +158,23 @@
         }
 
         .hero-image {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            max-width: 500px;
+            position: absolute;
+            right: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+             pointer-events: none;
         }
 
         .hero-image img {
-            width: 100%;
-            max-width: 650px;
+            width: 1000px;   /* nur hier skalierst du jetzt das große Bild */
             height: auto;
         }
+
+        .hero {
+            position: relative;
+        }
+
+
 
         /* Feature Cards */
         .features {

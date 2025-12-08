@@ -157,12 +157,15 @@
             gap: 12px; /* Vergrößert Abstand zu 12px (Pfeil bewegt sich) */
         }
 
-        .hero-image { /* Container für Walkie-Talkie Bild */
-            flex: 1; /* Nimmt verfügbaren Platz ein */
-            display: flex; /* Aktiviert Flexbox */
-            justify-content: center; /* Zentriert Bild horizontal */
-            align-items: center; /* Zentriert Bild vertikal */
-            max-width: 650px; /* Maximale Breite 650 Pixel */
+        .hero {
+            position: relative;
+        }
+
+        .hero-image {
+            position: absolute;
+            right: 60px;
+            top: 40px;
+            width: 650px;
         }
 
         .hero-image img { /* Das Walkie-Talkie Bild selbst */

@@ -26,7 +26,7 @@
 
         /* Header */ /* Kommentar zur Strukturierung */
         header { /* Styling für den Header-Bereich */
-            padding: 20px 40px; /* Innenabstand: 20px oben/unten, 40px links/rechts */
+            padding: 20px 80px; /* Innenabstand: 20px oben/unten, 40px links/rechts */
             border-bottom: 3px solid rgba(255, 255, 255, 0.1); /* Dünne, semi-transparente weiße Linie unten */
         }
 
@@ -41,7 +41,7 @@
             align-items: center; /* Zentriert Icon und Text vertikal */
             gap: 12px; /* Abstand zwischen Icon und Text */
             color: #49B5FE; /* blaue Textfarbe */
-            font-size: 18px; /* Schriftgröße 18 Pixel */
+            font-size: 22px; /* Schriftgröße 18 Pixel */
             font-weight: 600; /* Fettschrift (600 = semibold) */
         }
 
@@ -64,7 +64,7 @@
         .nav-links a { /* Styling für Navigations-Links */
             color: #ffffff; /* Weiße Textfarbe */
             text-decoration: none; /* Entfernt Unterstreichung */
-            font-size: 17px; /* Schriftgröße 17 Pixel */
+            font-size: 22px; /* Schriftgröße 17 Pixel */
             font-weight: 600; /* Fettschrift */
             transition: color 0.3s; /* Sanfter Farbübergang in 0.3 Sekunden */
         }
@@ -80,7 +80,7 @@
             border-radius: 50px; /* Stark abgerundete Ecken (Pill-Form) */
             text-decoration: none; /* Entfernt Unterstreichung */
             font-weight: 600; /* Fettschrift */
-            font-size: 17px; /* Schriftgröße 17 Pixel */
+            font-size: 22px; /* Schriftgröße 17 Pixel */
             transition: transform 0.2s, box-shadow 0.2s; /* Animiert Bewegung und Schatten */
         }
 
@@ -100,24 +100,26 @@
 
         .hero-content { /* Container für Text-Inhalt */
             flex: 1; /* Nimmt verfügbaren Platz ein */
-            max-width: 600px; /* Maximale Breite 600 Pixel */
+            max-width: 720px; /* Maximale Breite 600 Pixel */
             margin-bottom: 0px; /* 32px Abstand nach unten */
         }
 
-        .hero h1 { /* Hauptüberschrift "Engineering That Connects" */
-            color: white; /* Weiße Textfarbe */
-            font-size: 72px; /* Sehr große Schrift (72 Pixel) */
-            font-weight: 700; /* Extra fett (700 = bold) */
-            line-height: 1.1; /* Zeilenhöhe 110% der Schriftgröße */
-            margin-bottom: 32px; /* 32px Abstand nach unten */
+        .hero h1 {
+            color: white;
+            font-size: 84px;   /* vorher 72px */
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 36px;
         }
 
-        .hero-description { /* Beschreibungstext */
-            color: #B8C1E0; /* Helle blau-graue Textfarbe */
-            font-size: 18px; /* Schriftgröße 18 Pixel */
-            line-height: 1.6; /* Zeilenhöhe 160% für bessere Lesbarkeit */
-            margin-bottom: 32px; /* 32px Abstand nach unten */
+
+        .hero-description {
+            color: #B8C1E0;
+            font-size: 20px;   /* vorher 18px */
+            line-height: 1.7;
+            margin-bottom: 36px;
         }
+
 
         .hero-buttons { /* Container für Buttons */
             display: flex; /* Aktiviert Flexbox */
@@ -128,11 +130,11 @@
         .btn-primary { /* Primärer Button (Open Dashboard) */
             background: linear-gradient(135deg, #D946EF 0%, #A855F7 100%); /* Pink-lila Farbverlauf */
             color: white; /* Weiße Textfarbe */
-            padding: 20px 44px; /* Innenabstand: 20px oben/unten, 44px links/rechts */
+            padding: 22px 48px; /* Innenabstand: 20px oben/unten, 44px links/rechts */
             border-radius: 50px; /* Stark abgerundete Ecken */
             text-decoration: none; /* Entfernt Unterstreichung */
             font-weight: 600; /* Fettschrift */
-            font-size: 18px; /* Schriftgröße 18 Pixel */
+            font-size: 20px; /* Schriftgröße 18 Pixel */
             transition: transform 0.2s, box-shadow 0.2s; /* Animiert Bewegung und Schatten */
             display: inline-block; /* Macht Link zu Block-Element */
         }
@@ -146,7 +148,7 @@
             color: white; /* Weiße Textfarbe */
             text-decoration: none; /* Entfernt Unterstreichung */
             font-weight: 600; /* Fettschrift */
-            font-size: 18px; /* Schriftgröße 18 Pixel */
+            font-size: 20px; /* Schriftgröße 18 Pixel */
             display: inline-flex; /* Flex für Icon und Text */
             align-items: center; /* Zentriert Text und Pfeil vertikal */
             gap: 8px; /* 8px Abstand zwischen Text und Pfeil */
@@ -157,29 +159,33 @@
             gap: 12px; /* Vergrößert Abstand zu 12px (Pfeil bewegt sich) */
         }
 
-        .hero {
-            position: relative;
-        }
+.hero { /* Hero-Bereich mit reserviertem Platz für absolut positioniertes Bild */
+    position: relative; /* Bezugspunkt für das Bild */
+    padding-right: 760px; /* Fester Platz für Bild + Abstand (650px + 60px) */
+}
 
-        .hero-image {
-            position: absolute;
-            right: 60px;
-            top: 40px;
-            width: 650px;
-        }
+.hero-image { /* Bild liegt frei im Vordergrund und beeinflusst den Text NICHT */
+    position: absolute; /* Komplett aus dem normalen Layout entfernt */
+    right: 60px; /* Exakter Abstand vom rechten Rand */
+    top: 40px; /* Exakter Abstand von oben */
+    width: 700px; /* Feste Bildbreite */
+    height: 700px; /* Reservierte Höhe verhindert Nachladen-Verschiebung */
+}
 
-        .hero-image img { /* Das Walkie-Talkie Bild selbst */
-            width: 100%; /* Breite 100% des Containers */
-            max-width: 650px; /* Maximale Breite 650 Pixel */
-            height: auto; /* Höhe passt sich automatisch an */
-        }
+.hero-image img { /* Walkie-Talkie Bild ohne jegliche Layout-Verschiebung */
+    width: 100%; /* Füllt den Container vollständig */
+    height: 100%; /* Nutzt die reservierte Höhe */
+    object-fit: contain; /* Keine Verzerrung */
+    display: block; /* Entfernt Inline-Abstände */
+}
+
 
         /* Feature Cards */ /* Kommentar zur Strukturierung */
         .features { /* Container für Feature-Karten */
             display: flex; /* Aktiviert Flexbox */
             gap: 30px; /* 30px Abstand zwischen Karten */
             padding: 32px 60px 60px 80px; /* Abstand: 32px oben, 60px rechts, 60px unten, 80px links */
-            max-width: 700px; /* Maximale Breite 700 Pixel */
+            max-width: 800px; /* Maximale Breite 700 Pixel */
         }
 
         .feature-card { /* Einzelne Feature-Karte */
@@ -192,16 +198,22 @@
 
         .feature-card h3 { /* Überschrift der Feature-Karte */
             color: white; /* Weiße Textfarbe */
-            font-size: 22px; /* Schriftgröße 22 Pixel */
+            font-size: 24px; /* Schriftgröße 22 Pixel */
             font-weight: 600; /* Fettschrift */
             margin-bottom: 12px; /* 12px Abstand nach unten */
         }
 
         .feature-card p { /* Beschreibungstext der Feature-Karte */
             color: #B8C1E0; /* Helle blau-graue Textfarbe */
-            font-size: 15px; /* Schriftgröße 15 Pixel */
+            font-size: 17px; /* Schriftgröße 15 Pixel */
             line-height: 1.5; /* Zeilenhöhe 150% */
         }
+
+        .logo-img {
+            width: 36px;   /* vorher 24px */
+            height: 36px;
+        }
+
     </style> <!-- Ende der CSS-Styles -->
 </head> <!-- Ende des Head-Bereichs -->
 <body> <!-- Beginn des sichtbaren Inhalts -->
@@ -211,7 +223,7 @@
                 <div class="logo"> <!-- Logo-Container -->
                     <div class="logo-icon"> <!-- Icon-Box -->
                         <!-- Platzhalter für dein Logo Icon -->
-                        <img src="logo-icon.png" alt="Logo" style="width: 24px; height: 24px;"> <!-- Logo-Bild -->
+                        <img src="logo-icon.png" alt="Logo" class="logo-img"> <!-- Logo-Bild -->
                     </div>
                     <span>Der Horcher</span> <!-- Logo-Text -->
                 </div>

@@ -216,6 +216,8 @@
 
     </style> <!-- Ende der CSS-Styles -->
 </head> <!-- Ende des Head-Bereichs -->
+
+
 <body> <!-- Beginn des sichtbaren Inhalts -->
     <div class="main-container"> <!-- Haupt-Container -->
         <header> <!-- Header-Bereich -->
@@ -244,7 +246,9 @@
                     A next-generation communication platform that bridges embedded engineering with modern web technology. Designed for seamless UART communication, real-time data visualization, and intuitive browser-based control.
                 </p>
                 <div class="hero-buttons"> <!-- Button-Container -->
-                    <a href="#dashboard" class="btn-primary">Open Dashboard</a> <!-- Primärer Button -->
+                    <a href="javascript:void(0)" class="btn-primary" onclick="sendText('HELLO_FROM_WEB')">
+                        Open Dashboard
+                    </a>
                     <a href="#learn" class="btn-secondary"> <!-- Sekundärer Button -->
                         Learn more → <!-- Text mit Pfeil -->
                     </a>
@@ -266,6 +270,74 @@
                 <p>Live insights into device status, signal strength, uptime, and performance metrics.</p> <!-- Beschreibung -->
             </div>
         </div> <!-- Ende Features -->
+
+        <div
+            id="log"
+            style="
+            margin: 40px;
+            background: #000;
+            color: #0f0;
+            padding: 12px;
+            height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            "
+        ></div>
+
     </div> <!-- Ende main-container -->
+
+<script>
+let ws;
+
+function addLog(msg) {
+  const log = document.getElementById("log");
+  if (!log) return;
+
+  const line = document.createElement("div");
+  line.textContent = msg;
+  log.appendChild(line);
+  log.scrollTop = log.scrollHeight;
+}
+
+function connectBackend() {
+  ws = new WebSocket("ws://46.224.114.28:3000");
+
+  ws.onopen = () => {
+    console.log("Website: verbunden mit Backend");
+    addLog("Website: verbunden mit Backend");
+  };
+
+  ws.onmessage = (event) => {
+    if (typeof event.data === "string") {
+      console.log("Backend:", event.data);
+      addLog(event.data);
+    }
+  };
+
+  ws.onclose = () => {
+    addLog("Website: getrennt, reconnect in 2s");
+    setTimeout(connectBackend, 2000);
+  };
+
+  ws.onerror = () => {
+    ws.close();
+  };
+}
+
+function sendText(text) {
+  if (!ws || ws.readyState !== WebSocket.OPEN) {
+    console.warn("Website: Backend nicht verbunden");
+    addLog("Website: Backend nicht verbunden");
+    return;
+  }
+  ws.send(text);
+  addLog("Gesendet: " + text);
+}
+
+window.addEventListener("load", connectBackend);
+</script>
+
+
+
 </body> <!-- Ende body -->
 </html> <!-- Ende HTML-Dokument -->

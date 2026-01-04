@@ -300,6 +300,7 @@ function addLog(msg) {
 }
 
 function connectBackend() {
+    
   ws = new WebSocket("ws://46.224.114.28:3000");
 
   ws.onopen = () => {

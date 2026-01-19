@@ -1,344 +1,407 @@
-<!DOCTYPE html> <!-- Definiert das Dokument als HTML5 -->
-<html lang="de"> <!-- Startet HTML-Dokument, Sprache: Deutsch -->
-<head> <!-- Kopfbereich mit Metadaten -->
-    <meta charset="UTF-8"> <!-- Zeichenkodierung für Umlaute (ä, ö, ü) -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Macht die Seite responsive für mobile Geräte -->
-    <title>Der Horcher - Engineering That Connects</title> <!-- Titel im Browser-Tab -->
-    <style> 
-        * { /* Wählt ALLE Elemente aus */
-            margin: 0; /* Entfernt Standard-Außenabstände */
-            padding: 0; /* Entfernt Standard-Innenabstände */
-            box-sizing: border-box; /* Padding wird in Breite eingerechnet */
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Der Horcher – Engineering That Connects</title>
+
+    <style>
+        /* ================= RESET ================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        body { /* Styling für den gesamten Seiteninhalt */
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; /* System-Schriftarten */
-            background: linear-gradient(135deg, #4A5FD9 0%, #2E3B8E 100%); /* Blau-violetter Farbverlauf */
-            min-height: 100vh; /* Mindesthöhe = 100% der Viewport-Höhe */
-            padding: 20px 60px; /* Abstand: 20px oben/unten, 60px links/rechts */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #4A5FD9 0%, #2E3B8E 100%);
+            min-height: 100vh;
+            padding: 20px;
         }
 
-        .main-container { /* Haupt-Container für allen Inhalt */
-            background: #1a1f2e; /* Dunkle Hintergrundfarbe */
-            border-radius: 24px; /* Abgerundete Ecken mit 24px Radius */
-            overflow: hidden; /* Verhindert, dass Inhalt über Ecken hinausragt */
+        .main-container {
+            background: #1a1f2e;
+            border-radius: 24px;
+            overflow: hidden;
+            max-width: 1800px;
+            margin: 0 auto;
         }
 
-        /* Header */ /* Kommentar zur Strukturierung */
-        header { /* Styling für den Header-Bereich */
-            padding: 20px 80px; /* Innenabstand: 20px oben/unten, 40px links/rechts */
-            border-bottom: 3px solid rgba(255, 255, 255, 0.1); /* Dünne, semi-transparente weiße Linie unten */
+        /* ================= NAVBAR ================= */
+        header {
+            padding: 15px 100px;
+            border-bottom: 3px solid rgba(255, 255, 255, 0.1);
         }
 
-        nav { /* Navigation-Container */
-            display: flex; /* Aktiviert Flexbox-Layout */
-            justify-content: space-between; /* Verteilt Elemente mit maximalem Abstand */
-            align-items: center; /* Zentriert Elemente vertikal */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .logo { /* Logo-Container */
-            display: flex; /* Aktiviert Flexbox */
-            align-items: center; /* Zentriert Icon und Text vertikal */
-            gap: 12px; /* Abstand zwischen Icon und Text */
-            color: #49B5FE; /* blaue Textfarbe */
-            font-size: 22px; /* Schriftgröße 18 Pixel */
-            font-weight: 600; /* Fettschrift (600 = semibold) */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #49B5FE;
+            font-size: 22px;
+            font-weight: 600;
         }
 
-        .logo-icon { /* Box für das Logo-Icon */
-            width: 32px; /* Breite 32 Pixel */
-            height: 32px; /* Höhe 32 Pixel */
-            background: #1a1f2e; /* Bläuliche Hintergrundfarbe quasi keine */
-            border-radius: 8px; /* Leicht abgerundete Ecken */
-            display: flex; /* Aktiviert Flexbox */
-            align-items: center; /* Zentriert Icon vertikal */
-            justify-content: center; /* Zentriert Icon horizontal */
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .nav-links { /* Container für Navigations-Links */
-            display: flex; /* Aktiviert Flexbox */
-            gap: 40px; /* 40px Abstand zwischen den Links */
-            list-style: none; /* Entfernt Aufzählungspunkte */
+        .logo-img {
+            width: 36px;
+            height: 36px;
         }
 
-        .nav-links a { /* Styling für Navigations-Links */
-            color: #ffffff; /* Weiße Textfarbe */
-            text-decoration: none; /* Entfernt Unterstreichung */
-            font-size: 22px; /* Schriftgröße 17 Pixel */
-            font-weight: 600; /* Fettschrift */
-            transition: color 0.3s; /* Sanfter Farbübergang in 0.3 Sekunden */
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
         }
 
-        .nav-links a:hover { /* Wenn Maus über Link ist */
-            color: #4A9FFF; /* Ändert Farbe zu hellem Blau */
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 22px;
+            font-weight: 600;
+            transition: color 0.3s;
         }
 
-        .contact-btn { /* Styling für Contact-Button */
-            background: white; /* Weißer Hintergrund */
-            color: #1a1f2e; /* Dunkle Textfarbe */
-            padding: 12px 32px; /* Innenabstand: 12px oben/unten, 32px links/rechts */
-            border-radius: 50px; /* Stark abgerundete Ecken (Pill-Form) */
-            text-decoration: none; /* Entfernt Unterstreichung */
-            font-weight: 600; /* Fettschrift */
-            font-size: 22px; /* Schriftgröße 17 Pixel */
-            transition: transform 0.2s, box-shadow 0.2s; /* Animiert Bewegung und Schatten */
+        .nav-links a:hover {
+            color: #4A9FFF;
         }
 
-        .contact-btn:hover { /* Wenn Maus über Contact-Button */
-            transform: translateY(-2px); /* Bewegt Button 2px nach oben */
-            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3); /* Fügt weißen Schatten hinzu */
+        .contact-btn {
+            background: white;
+            color: #1a1f2e;
+            padding: 12px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 22px;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        /* Hero Section */ /* Kommentar zur Strukturierung */
-        .hero { /* Haupt-Banner-Bereich */
-            padding: 40px 60px 0 80px; /* Abstand: 80px oben, 60px rechts, 0 unten, 80px links */
-            display: flex; /* Aktiviert Flexbox */
-            justify-content: space-between; /* Verteilt Text und Bild mit Abstand */
-            align-items: center; /* Zentriert Inhalte vertikal */
-            gap: 60px; /* 60px Abstand zwischen Text und Bild */
+        .contact-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
         }
 
-        .hero-content { /* Container für Text-Inhalt */
-            flex: 1; /* Nimmt verfügbaren Platz ein */
-            max-width: 720px; /* Maximale Breite 600 Pixel */
-            margin-bottom: 0px; /* 32px Abstand nach unten */
+        /* ================= HERO ================= */
+        .hero {
+            padding: 0 100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 80px;
+        }
+
+        .hero-content {
+            flex: 1;
+            max-width: 900px;
+            margin-top: -200px; /* bewusstes Desktop-Tuning */
         }
 
         .hero h1 {
             color: white;
-            font-size: 84px;   /* vorher 72px */
+            font-size: 64px;
             font-weight: 700;
             line-height: 1.1;
-            margin-bottom: 36px;
+            margin-bottom: 24px;
         }
-
 
         .hero-description {
             color: #B8C1E0;
-            font-size: 20px;   /* vorher 18px */
-            line-height: 1.7;
-            margin-bottom: 36px;
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #D946EF, #A855F7);
+            color: white;
+            padding: 18px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(217, 70, 239, 0.4);
+        }
+
+        .btn-secondary {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: gap 0.3s;
+        }
+
+        .btn-secondary:hover {
+            gap: 12px;
+        }
+
+        /* ================= HERO IMAGE ================= */
+        .hero-image {
+            flex: 0 0 auto;
+            width: 600px;
+            height: 600px;
+            margin-left: auto;
+            margin-right: -80px;
+            position: relative;
+            top: 50px;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* ================= FEATURES ================= */
+        .features {
+            display: flex;
+            gap: 30px;
+            padding: 40px 100px 32px;
+            max-width: 1000px;
+        }
+
+        .feature-card {
+            background: #162132;
+            border-radius: 20px;
+            padding: 24px;
+            flex: 1;
+            height: 150px;
+            margin-top: -230px;
+        }
+
+        .feature-card h3 {
+            color: white;
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: #B8C1E0;
+            font-size: 17px;
+            line-height: 1.5;
         }
 
 
-        .hero-buttons { /* Container für Buttons */
-            display: flex; /* Aktiviert Flexbox */
-            gap: 24px; /* 24px Abstand zwischen Buttons */
-            align-items: center; /* Zentriert Buttons vertikal */
+        /* ================= RESPONSIVE ================= */
+
+        /* Laptop */
+        @media (max-width: 1400px) {
+            .hero-content { margin-top: -140px; }
+            .hero-image {
+                width: 520px;
+                height: 520px;
+                top: 30px;
+                margin-right: -40px;
+            }
+            .feature-card { margin-top: -180px; }
         }
 
-        .btn-primary { /* Primärer Button (Open Dashboard) */
-            background: linear-gradient(135deg, #D946EF 0%, #A855F7 100%); /* Pink-lila Farbverlauf */
-            color: white; /* Weiße Textfarbe */
-            padding: 22px 48px; /* Innenabstand: 20px oben/unten, 44px links/rechts */
-            border-radius: 50px; /* Stark abgerundete Ecken */
-            text-decoration: none; /* Entfernt Unterstreichung */
-            font-weight: 600; /* Fettschrift */
-            font-size: 20px; /* Schriftgröße 18 Pixel */
-            transition: transform 0.2s, box-shadow 0.2s; /* Animiert Bewegung und Schatten */
-            display: inline-block; /* Macht Link zu Block-Element */
+        /* Tablet */
+        @media (max-width: 1200px) {
+            .hero {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .hero-content {
+                margin-top: 0;
+                max-width: 100%;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-image {
+                width: 420px;
+                height: 420px;
+                top: 0;
+                margin: 40px 0 0;
+            }
+
+            .features {
+                justify-content: center;
+            }
+
+            .feature-card {
+                margin-top: 0;
+                max-width: 420px;
+            }
         }
 
-        .btn-primary:hover { /* Wenn Maus über primärem Button */
-            transform: translateY(-2px); /* Bewegt Button 2px nach oben */
-            box-shadow: 0 8px 24px rgba(217, 70, 239, 0.4); /* Fügt pink-lila Schatten hinzu */
+        /* Mobile */
+        @media (max-width: 768px) {
+            header {
+                padding: 12px 24px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 40px 24px 0;
+                gap: 40px;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .hero-image {
+                width: 300px;
+                height: 300px;
+            }
+
+            .features {
+                flex-direction: column;
+                padding: 40px 24px;
+                gap: 24px;
+            }
+
+            #log {
+                margin: 24px;
+            }
         }
+    </style>
+</head>
 
-        .btn-secondary { /* Sekundärer Button (Learn more) */
-            color: white; /* Weiße Textfarbe */
-            text-decoration: none; /* Entfernt Unterstreichung */
-            font-weight: 600; /* Fettschrift */
-            font-size: 20px; /* Schriftgröße 18 Pixel */
-            display: inline-flex; /* Flex für Icon und Text */
-            align-items: center; /* Zentriert Text und Pfeil vertikal */
-            gap: 8px; /* 8px Abstand zwischen Text und Pfeil */
-            transition: gap 0.3s; /* Animiert Abstand-Änderung */
-        }
+<body>
+<div class="main-container">
 
-        .btn-secondary:hover { /* Wenn Maus über sekundärem Button */
-            gap: 12px; /* Vergrößert Abstand zu 12px (Pfeil bewegt sich) */
-        }
-
-.hero { /* Hero-Bereich mit reserviertem Platz für absolut positioniertes Bild */
-    position: relative; /* Bezugspunkt für das Bild */
-    padding-right: 760px; /* Fester Platz für Bild + Abstand (650px + 60px) */
-}
-
-.hero-image { /* Bild liegt frei im Vordergrund und beeinflusst den Text NICHT */
-    position: absolute; /* Komplett aus dem normalen Layout entfernt */
-    right: 60px; /* Exakter Abstand vom rechten Rand */
-    top: 40px; /* Exakter Abstand von oben */
-    width: 700px; /* Feste Bildbreite */
-    height: 700px; /* Reservierte Höhe verhindert Nachladen-Verschiebung */
-}
-
-.hero-image img { /* Walkie-Talkie Bild ohne jegliche Layout-Verschiebung */
-    width: 100%; /* Füllt den Container vollständig */
-    height: 100%; /* Nutzt die reservierte Höhe */
-    object-fit: contain; /* Keine Verzerrung */
-    display: block; /* Entfernt Inline-Abstände */
-}
-
-
-        /* Feature Cards */ /* Kommentar zur Strukturierung */
-        .features { /* Container für Feature-Karten */
-            display: flex; /* Aktiviert Flexbox */
-            gap: 30px; /* 30px Abstand zwischen Karten */
-            padding: 32px 60px 60px 80px; /* Abstand: 32px oben, 60px rechts, 60px unten, 80px links */
-            max-width: 800px; /* Maximale Breite 700 Pixel */
-        }
-
-        .feature-card { /* Einzelne Feature-Karte */
-            background: #162132; /* Dunkle Hintergrundfarbe */
-            border-radius: 20px; /* Abgerundete Ecken */
-            border: 2px solid #162132; /* Rahmen in gleicher Farbe wie Hintergrund */
-            padding: 24px; /* Innenabstand 24 Pixel */
-            flex: 1; /* Beide Karten gleich breit */
-        }
-
-        .feature-card h3 { /* Überschrift der Feature-Karte */
-            color: white; /* Weiße Textfarbe */
-            font-size: 24px; /* Schriftgröße 22 Pixel */
-            font-weight: 600; /* Fettschrift */
-            margin-bottom: 12px; /* 12px Abstand nach unten */
-        }
-
-        .feature-card p { /* Beschreibungstext der Feature-Karte */
-            color: #B8C1E0; /* Helle blau-graue Textfarbe */
-            font-size: 17px; /* Schriftgröße 15 Pixel */
-            line-height: 1.5; /* Zeilenhöhe 150% */
-        }
-
-        .logo-img {
-            width: 36px;   /* vorher 24px */
-            height: 36px;
-        }
-
-    </style> <!-- Ende der CSS-Styles -->
-</head> <!-- Ende des Head-Bereichs -->
-
-
-<body> <!-- Beginn des sichtbaren Inhalts -->
-    <div class="main-container"> <!-- Haupt-Container -->
-        <header> <!-- Header-Bereich -->
-            <nav> <!-- Navigations-Bereich -->
-                <div class="logo"> <!-- Logo-Container -->
-                    <div class="logo-icon"> <!-- Icon-Box -->
-                        <!-- Platzhalter für dein Logo Icon -->
-                        <img src="logo-icon.png" alt="Logo" class="logo-img"> <!-- Logo-Bild -->
-                    </div>
-                    <span>Der Horcher</span> <!-- Logo-Text -->
+    <header>
+        <nav>
+            <div class="logo">
+                <div class="logo-icon">
+                    <img src="logo-icon.png" alt="Logo" class="logo-img">
                 </div>
-                <ul class="nav-links"> <!-- Navigations-Liste -->
-                    <li><a href="#home">Home</a></li> <!-- Navigations-Link Home -->
-                    <li><a href="#features">Features</a></li> <!-- Navigations-Link Features -->
-                    <li><a href="#project">Project</a></li> <!-- Navigations-Link Project -->
-                    <li><a href="#team">Our Team</a></li> <!-- Navigations-Link Our Team -->
-                </ul>
-                <a href="#contact" class="contact-btn">Contact</a> <!-- Contact-Button -->
-            </nav>
-        </header> <!-- Ende Header -->
-
-        <section class="hero"> <!-- Hero-Bereich (Haupt-Banner) -->
-            <div class="hero-content"> <!-- Text-Container -->
-                <h1>Engineering That Connects</h1> <!-- Hauptüberschrift -->
-                <p class="hero-description"> <!-- Beschreibungstext -->
-                    A next-generation communication platform that bridges embedded engineering with modern web technology. Designed for seamless UART communication, real-time data visualization, and intuitive browser-based control.
-                </p>
-                <div class="hero-buttons"> <!-- Button-Container -->
-                    <a href="javascript:void(0)" class="btn-primary" onclick="sendText('HELLO_FROM_WEB')">
-                        Open Dashboard
-                    </a>
-                    <a href="#learn" class="btn-secondary"> <!-- Sekundärer Button -->
-                        Learn more → <!-- Text mit Pfeil -->
-                    </a>
-                </div>
+                <span>Der Horcher</span>
             </div>
-            <div class="hero-image"> <!-- Bild-Container -->
-                <!-- Platzhalter für dein Walkie-Talkie Bild -->
-                <img src="walkie-talkie.png" alt="Walkie Talkie"> <!-- Walkie-Talkie Bild -->
-            </div>
-        </section> <!-- Ende Hero -->
 
-        <div class="features"> <!-- Feature-Karten Container -->
-            <div class="feature-card"> <!-- Erste Feature-Karte -->
-                <h3>UART Comunication</h3> <!-- Überschrift -->
-                <p>Reliable, low-latency serial communication for real-time interaction between your device and the web interface.</p> <!-- Beschreibung -->
-            </div>
-            <div class="feature-card"> <!-- Zweite Feature-Karte -->
-                <h3>System Monitoring</h3> <!-- Überschrift -->
-                <p>Live insights into device status, signal strength, uptime, and performance metrics.</p> <!-- Beschreibung -->
-            </div>
-        </div> <!-- Ende Features -->
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#project">Project</a></li>
+                <li><a href="#team">Our Team</a></li>
+            </ul>
 
-        <div
-            id="log"
-            style="
-            margin: 40px;
-            background: #000;
-            color: #0f0;
-            padding: 12px;
-            height: 200px;
-            overflow-y: auto;
-            font-family: monospace;
-            "
-        ></div>
+            <a href="#contact" class="contact-btn">Contact</a>
+        </nav>
+    </header>
 
-    </div> <!-- Ende main-container -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Engineering That Connects</h1>
+            <p class="hero-description">
+                A modern communication platform that connects embedded systems with the web.
+                 It enables easy UART communication, real-time data visualization, and browser-based control.
+            </p>
+
+            <div class="hero-buttons">
+                <a href="javascript:void(0)" class="btn-primary" onclick="sendText('HELLO_FROM_WEB')">
+                    Open Dashboard
+                </a>
+                <a href="#learn" class="btn-secondary">
+                    Learn more →
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-image">
+            <img src="walkie-talkie.png" alt="Walkie Talkie">
+        </div>
+    </section>
+
+    <div class="features">
+        <div class="feature-card">
+            <h3>UART Communication</h3>
+            <p>Reliable, low-latency communication for real-time interaction.</p>
+        </div>
+
+        <div class="feature-card">
+            <h3>System Monitoring</h3>
+            <p>Live insights into device status, signal strength and uptime.</p>
+        </div>
+    </div>
+
+    <div id="log"></div>
+
+</div>
 
 <script>
 let ws;
 
 function addLog(msg) {
-  const log = document.getElementById("log");
-  if (!log) return;
+    const log = document.getElementById("log");
+    if (!log) return;
 
-  const line = document.createElement("div");
-  line.textContent = msg;
-  log.appendChild(line);
-  log.scrollTop = log.scrollHeight;
+    const line = document.createElement("div");
+    line.textContent = msg;
+    log.appendChild(line);
+    log.scrollTop = log.scrollHeight;
 }
 
 function connectBackend() {
+    ws = new WebSocket("wss://api.htl-horcher.at");
 
-  ws = new WebSocket("wss://api.htl-horcher.at");
+    //ws.onopen = () => addLog("Website: verbunden mit Backend");
 
-  ws.onopen = () => {
-    console.log("Website: verbunden mit Backend");
-    addLog("Website: verbunden mit Backend");
-  };
+    ws.onmessage = (event) => {
+        if (typeof event.data === "string") {
+            addLog(event.data);
+        }
+    };
 
-  ws.onmessage = (event) => {
-    if (typeof event.data === "string") {
-      console.log("Backend:", event.data);
-      addLog(event.data);
-    }
-  };
+    ws.onclose = () => {
+        //addLog("Website: getrennt, reconnect in 2s");
+        setTimeout(connectBackend, 2000);
+    };
 
-  ws.onclose = () => {
-    addLog("Website: getrennt, reconnect in 2s");
-    setTimeout(connectBackend, 2000);
-  };
-
-  ws.onerror = () => {
-    ws.close();
-  };
+    ws.onerror = () => ws.close();
 }
 
 function sendText(text) {
-  if (!ws || ws.readyState !== WebSocket.OPEN) {
-    console.warn("Website: Backend nicht verbunden");
-    addLog("Website: Backend nicht verbunden");
-    return;
-  }
-  ws.send(text);
-  addLog("Gesendet: " + text);
+    if (!ws || ws.readyState !== WebSocket.OPEN) {
+        //addLog("Website: Backend nicht verbunden");
+        return;
+    }
+    ws.send(text);
+    //addLog("Gesendet: " + text);
 }
 
 window.addEventListener("load", connectBackend);
 </script>
 
-
-
-</body> <!-- Ende body -->
-</html> <!-- Ende HTML-Dokument -->
+</body>
+</html>

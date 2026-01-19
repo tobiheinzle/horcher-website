@@ -329,9 +329,10 @@
             </p>
 
             <div class="hero-buttons">
-                <a href="javascript:void(0)" class="btn-primary" onclick="sendText('HELLO_FROM_WEB')">
+                <a href="dashboard.html" class="btn-primary">
                     Open Dashboard
                 </a>
+
                 <a href="#learn" class="btn-secondary">
                     Learn more →
                 </a>
@@ -355,53 +356,9 @@
         </div>
     </div>
 
-    <div id="log"></div>
-
 </div>
 
-<script>
-let ws;
-
-function addLog(msg) {
-    const log = document.getElementById("log");
-    if (!log) return;
-
-    const line = document.createElement("div");
-    line.textContent = msg;
-    log.appendChild(line);
-    log.scrollTop = log.scrollHeight;
-}
-
-function connectBackend() {
-    ws = new WebSocket("wss://api.htl-horcher.at");
-
-    //ws.onopen = () => addLog("Website: verbunden mit Backend");
-
-    ws.onmessage = (event) => {
-        if (typeof event.data === "string") {
-            addLog(event.data);
-        }
-    };
-
-    ws.onclose = () => {
-        //addLog("Website: getrennt, reconnect in 2s");
-        setTimeout(connectBackend, 2000);
-    };
-
-    ws.onerror = () => ws.close();
-}
-
-function sendText(text) {
-    if (!ws || ws.readyState !== WebSocket.OPEN) {
-        //addLog("Website: Backend nicht verbunden");
-        return;
-    }
-    ws.send(text);
-    //addLog("Gesendet: " + text);
-}
-
-window.addEventListener("load", connectBackend);
-</script>
+<script src="websocket.js"></script>
 
 </body>
 </html>

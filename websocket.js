@@ -1,4 +1,5 @@
-let ws;
+let ws = null;
+let connecting = false;
 
 function addLog(msg) {
     const log = document.getElementById("log");
@@ -11,12 +12,18 @@ function addLog(msg) {
 }
 
 function connectBackend() {
-    //ws = new WebSocket("ws://localhost:3000");            lokal
-    ws = new WebSocket("wss://api.htl-horcher.at");       //öffentlich 
+    // ⛔ schon verbunden oder im Aufbau
+    if (ws && ws.readyState === WebSocket.OPEN) return;
+    if (connecting) return;
 
+    connecting = true;
+
+    ws = new WebSocket("ws://localhost:3000"); // lokal
+    // ws = new WebSocket("wss://api.htl-horcher.at"); // öffentlich
 
     ws.onopen = () => {
         console.log("WebSocket verbunden");
+        connecting = false;
         ws.send("WEB_CONNECT");
     };
 
@@ -27,16 +34,22 @@ function connectBackend() {
     };
 
     ws.onclose = () => {
+        console.warn("WebSocket getrennt – reconnect in 2s");
+        ws = null;
+        connecting = false;
         setTimeout(connectBackend, 2000);
     };
 
-    ws.onerror = () => ws.close();
+    ws.onerror = () => {
+        connecting = false;
+        if (ws) ws.close();
+    };
 }
-
 
 function sendText(text) {
     if (!ws || ws.readyState !== WebSocket.OPEN) return;
     ws.send(text);
 }
 
+// 🔁 EINMAL beim Laden verbinden
 window.addEventListener("load", connectBackend);

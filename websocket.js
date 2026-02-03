@@ -18,8 +18,8 @@ function connectBackend() {
 
     connecting = true;
 
-    ws = new WebSocket("ws://localhost:3000"); // lokal
-    // ws = new WebSocket("wss://api.htl-horcher.at"); // öffentlich
+    //ws = new WebSocket("ws://localhost:3000"); // lokal
+    ws = new WebSocket("wss://api.htl-horcher.at"); // öffentlich
 
     ws.onopen = () => {
         console.log("WebSocket verbunden");

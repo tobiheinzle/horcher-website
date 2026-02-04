@@ -17,7 +17,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
-            background-color:#0d1117;
+            background-color: #0d1117;
             color: #e6edf3;
             height: 100vh;
             overflow: hidden;
@@ -29,7 +29,7 @@
 
         .container {
             display: flex;
-            height: 100%;
+            height: 100vh;
         }
 
         /* ========================================
@@ -129,6 +129,7 @@
             font-size: 14px;
             margin-bottom: 2px;
             transition: background-color 0.2s;
+            cursor: pointer;
         }
 
         .nav-item:hover {
@@ -185,6 +186,7 @@
             font-size: 12px;
             margin: 2px 0;
             transition: background-color 0.2s;
+            cursor: pointer;
         }
 
         .history-item:hover {
@@ -217,6 +219,21 @@
             opacity: 1;
         }
 
+        /* Header Layout ändern, wenn Sidebar collapsed ist */
+        .sidebar.collapsed .sidebar-header {
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .sidebar.collapsed .header-actions {
+            margin-left: 0;
+        }
+        
+        .sidebar.collapsed .icon-btn {
+            padding: 8px;
+        }
+
         /* ========================================
            MAIN CONTENT
            ======================================== */
@@ -226,10 +243,9 @@
             display: flex;
             flex-direction: column;
             background-color: #0d1117;
+            height: 100vh;
             overflow: hidden;
-            min-height: 0;
         }
-
 
         .chat-container {
             flex: 1;
@@ -238,10 +254,9 @@
             max-width: 900px;
             width: 100%;
             margin: 0 auto;
+            height: 100%;
             overflow: hidden;
-            min-height: 0; /* 🔥 ABSOLUT ENTSCHEIDEND */
         }
-
 
         .chat-messages {
             flex: 1;
@@ -272,6 +287,13 @@
             word-wrap: break-word;
         }
 
+        .user-message .message-content img {
+            max-width: 100%;
+            border-radius: 8px;
+            display: block;
+            margin-top: 8px;
+        }
+
         .assistant-message .message-content {
             background-color: #161b22;
             padding: 16px 20px;
@@ -286,6 +308,20 @@
 
         .assistant-message .message-content p:last-child {
             margin-bottom: 0;
+        }
+
+        .assistant-message .message-content img {
+            max-width: 100%;
+            border-radius: 8px;
+            display: block;
+            margin-top: 8px;
+        }
+
+        .assistant-message .message-content audio {
+            max-width: 100%;
+            border-radius: 8px;
+            display: block;
+            margin-top: 8px;
         }
 
         .message-actions {
@@ -356,15 +392,30 @@
         }
 
         .add-btn:hover,
-        .mode-btn:hover,
         .voice-btn:hover {
             background-color: #30363d;
             color: #e6edf3;
         }
 
-        .mode-btn {
+        .voice-btn.recording {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .recording-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #ef4444;
             font-size: 13px;
+            font-weight: 500;
             padding: 8px 12px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
 
         .chat-input {
@@ -409,21 +460,6 @@
         .chat-messages::-webkit-scrollbar-thumb:hover {
             background-color: #484f58;
         }
-        /* Header Layout ändern, wenn Sidebar collapsed ist */
-        .sidebar.collapsed .sidebar-header {
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
-        .sidebar.collapsed .header-actions {
-            margin-left: 0;
-        }
-        .sidebar.collapsed .icon-btn {
-            padding: 8px;
-        }
-
-
-
 
         /* ========================================
            RESPONSIVE DESIGN
@@ -497,43 +533,6 @@
 
             <div class="chat-history">
                 <h3>Conversations</h3>
-                <div class="history-section">
-                    <span class="history-label">Today</span>
-                    <a href="#" class="history-item active">
-                        <span class="history-text">Current conversation title...</span>
-                        <button class="more-btn" aria-label="More options">⋯</button>
-                    </a>
-                </div>
-
-                <div class="history-section">
-                    <span class="history-date">Yesterday</span>
-                    <a href="#" class="history-item">
-                        <span class="history-text">Previous chat topic here...</span>
-                    </a>
-                </div>
-
-                <div class="history-section">
-                    <span class="history-date">Last Week</span>
-                    <a href="#" class="history-item">
-                        <span class="history-text">Another conversation example...</span>
-                    </a>
-                    <a href="#" class="history-item">
-                        <span class="history-text">Chat history item...</span>
-                    </a>
-                </div>
-
-                <div class="history-section">
-                    <span class="history-date">Last Month</span>
-                    <a href="#" class="history-item">
-                        <span class="history-text">Older conversation title...</span>
-                    </a>
-                    <a href="#" class="history-item">
-                        <span class="history-text">Previous discussion topic...</span>
-                    </a>
-                    <a href="#" class="history-item">
-                        <span class="history-text">Another chat example...</span>
-                    </a>
-                </div>
             </div>
         </aside>
 
@@ -547,7 +546,8 @@
                 <!-- Input Area -->
                 <div class="input-container">
                     <div class="input-wrapper">
-                        <button class="add-btn" aria-label="Add attachment">
+                        <input type="file" id="file-input" accept="image/*" style="display: none;">
+                        <button type="button" class="add-btn" id="attach-btn" aria-label="Add attachment">
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
                                 <path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="2"/>
                             </svg>
@@ -558,13 +558,13 @@
                             rows="1"
                             aria-label="Chat message input"
                         ></textarea>
-                        <button class="mode-btn" aria-label="Select mode">
-                            Smart
-                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                                <path d="M3 5l3 3 3-3" stroke="currentColor" fill="none"/>
+                        <span class="recording-indicator" id="recording-indicator" style="display: none;">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                                <circle cx="8" cy="8" r="6" fill="#ef4444"/>
                             </svg>
-                        </button>
-                        <button class="voice-btn" aria-label="Voice input">
+                            Recording...
+                        </span>
+                        <button type="button" class="voice-btn" id="voice-btn" aria-label="Voice input">
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
                                 <rect x="8" y="3" width="4" height="9" rx="2" stroke="currentColor" fill="none"/>
                                 <path d="M5 9a5 9 0 0010 0M10 15v2" stroke="currentColor"/>

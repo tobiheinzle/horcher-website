@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Device - Horcher</title>
+    <style>
+        /* ===============================================
+           RESET & BASE STYLES
+           =============================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #0d1117;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* ===============================================
+           MAIN CONTAINER
+           =============================================== */
+        .selection-container {
+            background: #0F182B;
+            border-radius: 24px;
+            padding: 60px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* ===============================================
+           TYPOGRAPHY
+           =============================================== */
+        h1 {
+            color: white;
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .subtitle {
+            color: #B8C1E0;
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+
+        /* ===============================================
+           DROPDOWN CONTAINER & BUTTON
+           =============================================== */
+        .dropdown-container {
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .dropdown-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #D946EF, #A855F7);
+            color: white;
+            padding: 18px 40px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .dropdown-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(217, 70, 239, 0.4);
+        }
+
+        /* Dropdown arrow icon animation */
+        .dropdown-icon {
+            transition: transform 0.3s;
+        }
+
+        /* Rotate arrow when dropdown is open */
+        .dropdown-btn.open .dropdown-icon {
+            transform: rotate(180deg);
+        }
+
+        /* ===============================================
+           DROPDOWN MENU
+           =============================================== */
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 0;
+            right: 0;
+            background: #162132;
+            border-radius: 20px;
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transition: max-height 0.3s, opacity 0.3s;
+            z-index: 100;
+        }
+
+        /* Dropdown menu when open */
+        .dropdown-menu.open {
+            max-height: 300px;
+            opacity: 1;
+        }
+
+        /* ===============================================
+           DEVICE ITEMS IN DROPDOWN
+           =============================================== */
+        .dropdown-item {
+            padding: 18px 24px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Hover effect only for clickable (non-disabled) items */
+        .dropdown-item:hover:not(.disabled) {
+            background-color: rgba(217, 70, 239, 0.1);
+        }
+
+        /* Disabled items (offline or in use) */
+        .dropdown-item.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .device-name {
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        /* ===============================================
+           DEVICE STATUS BADGES
+           =============================================== */
+        .device-status {
+            font-size: 14px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        /* Green badge - device is online and available */
+        .device-status.available {
+            background-color: #10b981 !important;
+            color: white !important;
+        }
+
+        /* Orange badge - device is online but another user is connected */
+        .device-status.in-use {
+            background-color: #f59e0b !important;
+            color: white !important;
+        }
+
+        /* Gray badge - device is offline or not connected */
+        .device-status.offline {
+            background-color: #6b7280 !important;
+            color: white !important;
+        }
+
+        /* Gray badge - device is not available (same as offline) */
+        .device-status.not-available {
+            background-color: #6b7280 !important;
+            color: white !important;
+        }
+
+        /* ===============================================
+           INFO BOX
+           =============================================== */
+        .info-box {
+            background: #162132;
+            border-radius: 20px;
+            padding: 24px;
+            margin-top: 160px;
+        }
+
+        .info-box h3 {
+            color: white;
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .info-box p {
+            color: #B8C1E0;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        /* ===============================================
+           BACK LINK
+           =============================================== */
+        .back-link {
+            margin-top: 30px;
+        }
+
+        .back-link a {
+            color: #4A9FFF;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: gap 0.3s;
+        }
+
+        .back-link a:hover {
+            gap: 12px;
+        }
+
+        /* ===============================================
+           LOADING MESSAGE
+           =============================================== */
+        .loading {
+            color: #B8C1E0;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        /* ===============================================
+           FOOTER
+           =============================================== */
+        footer {
+            background: #0d1117;
+            padding: 30px;
+            text-align: center;
+            margin-top: 60px;
+            border-top: 2px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+        }
+
+        footer p {
+            color: #B8C1E0;
+            font-size: 16px;
+            margin: 0;
+        }
+
+        /* ===============================================
+           RESPONSIVE DESIGN
+           =============================================== */
+        @media (max-width: 768px) {
+            .selection-container {
+                padding: 40px 24px;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            .subtitle {
+                font-size: 16px;
+            }
+
+            footer {
+                padding: 24px;
+                margin-top: 40px;
+            }
+
+            footer p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="selection-container">
+        <h1>Select Your Device</h1>
+        <p class="subtitle">Choose an ESP device to connect to...</p>
+
+        <!-- Dropdown container -->
+        <div class="dropdown-container">
+            <!-- Main dropdown button - always enabled -->
+            <button class="dropdown-btn" id="dropdown-btn">
+                <span id="selected-text">Select a Device</span>
+                <!-- Dropdown arrow icon -->
+                <svg class="dropdown-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+
+            <!-- Dropdown menu - items populated dynamically by JavaScript -->
+            <div class="dropdown-menu" id="dropdown-menu">
+                <!-- Device items will be added here by updateDeviceList() -->
+            </div>
+        </div>
+
+        <!-- Information box explaining one-user-per-ESP rule -->
+        <div class="info-box">
+            <h3>Important Information</h3>
+            <p>Only one user can be connected to an ESP32 at a time. If the device is currently in use, please wait until it becomes available.</p>
+        </div>
+
+        <!-- Back to homepage link -->
+        <div class="back-link">
+            <a href="index.html">← Back to Home</a>
+        </div>
+
+        <!-- Loading message shown when connecting to selected device -->
+        <p class="loading" id="loading-message" style="display: none;">Connecting...</p>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 HF-Transceiver Project – HTL Rankweil. All rights reserved.</p>
+    </footer>
+
+    <script>
+        /* ===============================================
+           GLOBAL STATE VARIABLES
+           =============================================== */
+        let ws = null;
+        let deviceStatus = {};
+
+        /* ===============================================
+           WEBSOCKET CONNECTION & STATUS REQUEST
+           =============================================== */
+        
+        function connectAndGetStatus() {
+            //ws = new WebSocket("ws://localhost:3000");
+            ws = new WebSocket("wss://api.htl-horcher.at");               //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+            ws.onopen = () => {
+                console.log("✅ Connected to backend");
+                ws.send("STATUS_REQUEST");
+            };
+
+            ws.onmessage = (event) => {
+                if (typeof event.data === 'string') {
+                    try {
+                        const data = JSON.parse(event.data);
+                        
+                        if (data.type === "STATUS") {
+                            console.log("📊 Status received:", data.data);
+                            deviceStatus = data.data;
+                            updateDeviceList();
+                        }
+                    } catch (e) {
+                        // Not JSON, ignore
+                    }
+                }
+            };
+
+            ws.onerror = (error) => {
+                console.error("❌ WebSocket error:", error);
+                updateDeviceList();
+            };
+        }
+
+        /* ===============================================
+           UPDATE DEVICE LIST UI
+           =============================================== */
+        
+        function updateDeviceList() {
+            console.log("🔄 Rebuilding device list...");
+            
+            const dropdownMenu = document.getElementById("dropdown-menu");
+            dropdownMenu.innerHTML = '';
+            
+            const esp1Item = createDeviceItem("ESP_1", "ESP Device 1", deviceStatus.ESP_1);
+            dropdownMenu.appendChild(esp1Item);
+            
+            const esp2Item = createDeviceItem("ESP_2", "ESP Device 2", deviceStatus.ESP_2);
+            dropdownMenu.appendChild(esp2Item);
+            
+            console.log("✅ Device list rebuilt");
+        }
+
+        /* ===============================================
+           CREATE INDIVIDUAL DEVICE ITEM
+           =============================================== */
+        
+        function createDeviceItem(espId, deviceName, status) {
+            const item = document.createElement("div");
+            item.className = "dropdown-item";
+            item.dataset.esp = espId;
+            
+            const nameSpan = document.createElement("span");
+            nameSpan.className = "device-name";
+            nameSpan.textContent = deviceName;
+            
+            const statusSpan = document.createElement("span");
+            statusSpan.className = "device-status";
+            
+            if (!status || !status.connected) {
+                statusSpan.textContent = "Not Available";
+                statusSpan.classList.add("not-available");
+                item.classList.add("disabled");
+                console.log(`${espId}: NOT AVAILABLE`);
+                
+            } else if (!status.available) {
+                statusSpan.textContent = "In Use";
+                statusSpan.classList.add("in-use");
+                item.classList.add("disabled");
+                console.log(`${espId}: IN USE`);
+                
+            } else {
+                statusSpan.textContent = "Available";
+                statusSpan.classList.add("available");
+                item.classList.remove("disabled");
+                console.log(`${espId}: AVAILABLE ✅`);
+                
+                item.addEventListener("click", () => selectDevice(espId));
+                item.style.cursor = "pointer";
+            }
+            
+            item.appendChild(nameSpan);
+            item.appendChild(statusSpan);
+            
+            return item;
+        }
+
+        /* ===============================================
+           DROPDOWN TOGGLE FUNCTIONALITY
+           =============================================== */
+        
+        const dropdownBtn = document.getElementById("dropdown-btn");
+        const dropdownMenu = document.getElementById("dropdown-menu");
+
+        dropdownBtn.addEventListener("click", () => {
+            dropdownBtn.classList.toggle("open");
+            dropdownMenu.classList.toggle("open");
+        });
+
+        /* ===============================================
+           DEVICE SELECTION & REDIRECT
+           =============================================== */
+        
+        function selectDevice(espId) {
+            console.log(`✅ Selected ${espId}`);
+            
+            dropdownBtn.classList.remove("open");
+            dropdownMenu.classList.remove("open");
+            
+            document.getElementById("loading-message").style.display = "block";
+            
+            localStorage.setItem("selectedESP", espId);
+            
+            setTimeout(() => {
+                window.location.href = "dashboard.html";
+            }, 500);
+        }
+
+        /* ===============================================
+           CLOSE DROPDOWN WHEN CLICKING OUTSIDE
+           =============================================== */
+        
+        document.addEventListener("click", (e) => {
+            if (!e.target.closest(".dropdown-container")) {
+                dropdownBtn.classList.remove("open");
+                dropdownMenu.classList.remove("open");
+            }
+        });
+
+        /* ===============================================
+           INITIALIZATION
+           =============================================== */
+        
+        window.addEventListener("load", () => {
+            updateDeviceList();
+            connectAndGetStatus();
+        });
+
+        /* ===============================================
+           AUTO-REFRESH STATUS
+           =============================================== */
+        
+        setInterval(() => {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send("STATUS_REQUEST");
+            }
+        }, 3000);
+    </script>
+</body>
+</html>

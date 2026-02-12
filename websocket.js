@@ -1,10 +1,11 @@
 /* =====================================================
-   WEBSOCKET CLIENT - Simplified
-   Handles connection, text, images, and audio
+   WEBSOCKET CLIENT - With ESP Selection Support
    ===================================================== */
 
 let ws = null;
 let connecting = false;
+let connectionAccepted = false;
+let selectedESP = null;
 
 // Buffers for incoming media
 let imageChunks = [];
@@ -18,18 +19,61 @@ function connectBackend() {
     if (ws && ws.readyState === WebSocket.OPEN) return;
     if (connecting) return;
 
+    // Get selected ESP from localStorage
+    selectedESP = localStorage.getItem("selectedESP");
+    
+    if (!selectedESP) {
+        console.error("No ESP selected - redirecting to selection page");
+        window.location.href = "device-selection.html";
+        return;
+    }
+
     connecting = true;
-    //ws = new WebSocket("ws://localhost:3000");                !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    ws = new WebSocket("wss://api.htl-horcher.at"); // öffentlich
+    connectionAccepted = false;
+    
+    //ws = new WebSocket("ws://localhost:3000");
+    ws = new WebSocket("wss://api.htl-horcher.at");
     ws.binaryType = "arraybuffer";
 
     ws.onopen = () => {
-        console.log("✅ WebSocket connected");
+        console.log(`✅ WebSocket connected - requesting access to ${selectedESP}...`);
         connecting = false;
-        ws.send("WEB_CONNECT");
+        ws.send(`WEB_CONNECT:${selectedESP}`);
     };
 
     ws.onmessage = (event) => {
+        // Handle connection status
+        if (typeof event.data === "string") {
+            if (event.data.startsWith("CONNECTION_ACCEPTED")) {
+                connectionAccepted = true;
+                const espId = event.data.split(":")[1];
+                console.log(`✅ Connection accepted - connected to ${espId}`);
+                showConnectionStatus(`Connected to ${espId}`, true);
+                return;
+            }
+            
+            if (event.data.startsWith("CONNECTION_REJECTED")) {
+                connectionAccepted = false;
+                const reason = event.data.split(":")[1];
+                console.error("❌ Connection rejected:", reason);
+                showConnectionStatus(reason, false);
+                
+                // Redirect back to selection after 3 seconds
+                setTimeout(() => {
+                    window.location.href = "device-selection.html";
+                }, 3000);
+                return;
+            }
+
+            if (event.data.startsWith("ERROR:")) {
+                console.error("❌ Error:", event.data);
+                return;
+            }
+        }
+
+        // Only process messages if connection is accepted
+        if (!connectionAccepted) return;
+
         // TEXT message
         if (typeof event.data === "string") {
             console.log("📩 Text:", event.data);
@@ -54,26 +98,66 @@ function connectBackend() {
     };
 
     ws.onclose = () => {
-        console.warn("❌ Disconnected - reconnecting in 2s");
+        console.warn("❌ Disconnected");
         ws = null;
         connecting = false;
-        setTimeout(connectBackend, 2000);
+        connectionAccepted = false;
+        showConnectionStatus("Disconnected - redirecting...", false);
+        
+        // Redirect to selection page after disconnect
+        setTimeout(() => {
+            window.location.href = "device-selection.html";
+        }, 2000);
     };
 
     ws.onerror = (error) => {
         console.error("🔴 Error:", error);
         connecting = false;
+        connectionAccepted = false;
         if (ws) ws.close();
     };
 }
 
 /* =====================================================
-   SENDING
+   CONNECTION STATUS UI
+   ===================================================== */
+
+function showConnectionStatus(message, isConnected) {
+    let statusDiv = document.getElementById('connection-status');
+    
+    if (!statusDiv) {
+        statusDiv = document.createElement('div');
+        statusDiv.id = 'connection-status';
+        statusDiv.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            z-index: 10000;
+        `;
+        document.body.appendChild(statusDiv);
+    }
+    
+    if (isConnected) {
+        statusDiv.style.background = '#10b981';
+        statusDiv.style.color = 'white';
+    } else {
+        statusDiv.style.background = '#ef4444';
+        statusDiv.style.color = 'white';
+    }
+    
+    statusDiv.textContent = message;
+}
+
+/* =====================================================
+   SENDING - Same as before
    ===================================================== */
 
 function sendText(text) {
-    if (!ws || ws.readyState !== WebSocket.OPEN) {
-        console.warn("⚠️ Not connected");
+    if (!ws || ws.readyState !== WebSocket.OPEN || !connectionAccepted) {
+        console.warn("⚠️ Not connected or access denied");
         return false;
     }
     ws.send(text);
@@ -81,20 +165,19 @@ function sendText(text) {
 }
 
 async function sendImage(file) {
-    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
+    if (!ws || ws.readyState !== WebSocket.OPEN || !connectionAccepted) return false;
 
     const CHUNK_SIZE = 1024;
     const arrayBuffer = await file.arrayBuffer();
     const totalBytes = arrayBuffer.byteLength;
     let offset = 0;
 
-    // Send chunks
     while (offset < totalBytes) {
         const end = Math.min(offset + CHUNK_SIZE, totalBytes);
         const chunk = arrayBuffer.slice(offset, end);
         
         const frame = new Uint8Array(1 + chunk.byteLength);
-        frame[0] = 0x03; // IMAGE type
+        frame[0] = 0x03;
         frame.set(new Uint8Array(chunk), 1);
         
         ws.send(frame.buffer);
@@ -102,27 +185,25 @@ async function sendImage(file) {
         await new Promise(resolve => setTimeout(resolve, 10));
     }
 
-    // Send END frame
     ws.send(new Uint8Array([0x03]).buffer);
     console.log("✅ Image sent:", totalBytes, "bytes");
     return true;
 }
 
 async function sendAudio(blob) {
-    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
+    if (!ws || ws.readyState !== WebSocket.OPEN || !connectionAccepted) return false;
 
     const CHUNK_SIZE = 1024;
     const arrayBuffer = await blob.arrayBuffer();
     const totalBytes = arrayBuffer.byteLength;
     let offset = 0;
 
-    // Send chunks
     while (offset < totalBytes) {
         const end = Math.min(offset + CHUNK_SIZE, totalBytes);
         const chunk = arrayBuffer.slice(offset, end);
         
         const frame = new Uint8Array(1 + chunk.byteLength);
-        frame[0] = 0x02; // AUDIO type
+        frame[0] = 0x02;
         frame.set(new Uint8Array(chunk), 1);
         
         ws.send(frame.buffer);
@@ -130,18 +211,16 @@ async function sendAudio(blob) {
         await new Promise(resolve => setTimeout(resolve, 10));
     }
 
-    // Send END frame
     ws.send(new Uint8Array([0x02]).buffer);
     console.log("✅ Audio sent:", totalBytes, "bytes");
     return true;
 }
 
 /* =====================================================
-   RECEIVING
+   RECEIVING - Same as before
    ===================================================== */
 
 function handleImageChunk(payload) {
-    // END frame - assemble and display
     if (payload.length === 0) {
         if (imageChunks.length === 0) return;
 
@@ -167,12 +246,10 @@ function handleImageChunk(payload) {
         return;
     }
 
-    // Regular chunk
     imageChunks.push(payload);
 }
 
 function handleAudioChunk(payload) {
-    // END frame - assemble and display
     if (payload.length === 0) {
         if (audioChunks.length === 0) return;
 
@@ -199,7 +276,6 @@ function handleAudioChunk(payload) {
         return;
     }
 
-    // Regular chunk
     audioChunks.push(payload);
 }
 

@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Team - Horcher</title>
+    <style>
+        /* ================= RESET ================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #0d1117;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .main-container {
+            background: #0F182B;
+            border-radius: 24px;
+            overflow: hidden;
+            max-width: 1800px;
+            margin: 0 auto;
+            padding-bottom: 60px;
+        }
+
+        /* ================= NAVBAR ================= */
+        header {
+            padding: 15px 100px;
+            border-bottom: 3px solid rgba(255, 255, 255, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #49B5FE;
+            font-size: 22px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 22px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #4A9FFF;
+        }
+
+        .contact-btn {
+            background: white;
+            color: #0F182B;
+            padding: 12px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 22px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .contact-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+        }
+
+        /* ================= HERO SECTION ================= */
+        .hero-section {
+            text-align: center;
+            padding: 60px 100px 40px;
+        }
+
+        .hero-section h1 {
+            color: white;
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .hero-section .subtitle {
+            color: #B8C1E0;
+            font-size: 24px;
+            margin-bottom: 50px;
+        }
+
+        /* ================= PROJECT INFO - FULL WIDTH CARDS ================= */
+        .project-info {
+            max-width: 1400px;
+            margin: 0 auto 80px;
+            padding: 0 100px;
+        }
+
+        .info-card {
+            background: #162132;
+            border-radius: 20px;
+            padding: 40px 60px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .info-card h3 {
+            color: white;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .info-card p {
+            color: #B8C1E0;
+            font-size: 20px;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* ================= TEAM MEMBERS ================= */
+        .team-section {
+            padding: 0 100px 60px;
+        }
+
+        .team-section h2 {
+            color: white;
+            font-size: 42px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .team-member {
+            background: #162132;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .team-member:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .member-photo {
+            width: 100%;
+            height: 450px;
+            object-fit: cover;
+            object-position: center top;
+            background: #B8C1E0;
+        }
+
+        .member-info {
+            padding: 28px;
+        }
+
+        .member-name {
+            color: white;
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .member-role {
+            color: #49B5FE;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 18px;
+        }
+
+        .member-responsibilities {
+            list-style: none;
+            padding: 0;
+        }
+
+        .member-responsibilities li {
+            color: #B8C1E0;
+            font-size: 17px;
+            padding: 7px 0;
+            padding-left: 22px;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .member-responsibilities li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #49B5FE;
+            font-weight: bold;
+        }
+
+        /* ================= PROJECT STATS ================= */
+        .stats-section {
+            padding: 60px 100px;
+        }
+
+        .stats-section h2 {
+            color: white;
+            font-size: 42px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .stat-number {
+            color: #49B5FE;
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .stat-label {
+            color: #B8C1E0;
+            font-size: 19px;
+            line-height: 1.4;
+        }
+
+        .stat-sublabel {
+            color: #8b949e;
+            font-size: 16px;
+            margin-top: 6px;
+        }
+
+        /* ================= ACKNOWLEDGMENTS ================= */
+        .acknowledgments {
+            max-width: 900px;
+            margin: 60px auto 0;
+            padding: 40px;
+            border: 2px solid #49B5FE;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .acknowledgments h2 {
+            color: white;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .acknowledgments p {
+            color: #B8C1E0;
+            font-size: 21px;
+            line-height: 1.6;
+        }
+
+        .acknowledgments .highlight {
+            color: #49B5FE;
+            font-weight: 600;
+        }
+
+        /* ================= FOOTER ================= */
+        footer {
+            background: #0d1117;
+            padding: 30px;
+            text-align: center;
+            margin-top: 60px;
+            border-top: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        footer p {
+            color: #B8C1E0;
+            font-size: 16px;
+            margin: 0;
+        }
+
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 1200px) {
+            .team-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 12px 24px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero-section,
+            .team-section,
+            .stats-section,
+            .project-info {
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+
+            .hero-section h1 {
+                font-size: 36px;
+            }
+
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .acknowledgments {
+                margin: 40px 24px 0;
+                padding: 30px 20px;
+            }
+
+            .info-card {
+                padding: 30px 24px;
+            }
+
+            footer {
+                padding: 24px;
+                margin-top: 40px;
+            }
+
+            footer p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Navbar -->
+        <header>
+            <nav>
+                <a href="index.html" class="logo">
+                    <img src="logo-icon.png" alt="Logo" class="logo-icon">
+                    <span>Horcher</span>
+                </a>
+
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#project">Project</a></li>
+                    <li><a href="team.html">Our Team</a></li>
+                </ul>
+
+                <a href="#contact" class="contact-btn">Contact</a>
+            </nav>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1>OUR TEAM</h1>
+            <p class="subtitle">Building the wireless communication system at HTL Rankweil</p>
+        </section>
+
+        <!-- Project Info Cards - Full Width -->
+        <div class="project-info">
+            <div class="info-card">
+                <h3>About the Project</h3>
+                <p>Our innovative device, the HF-Transceiver "Horcher", was developed as part of our diploma thesis during our final year at HTL Rankweil.</p>
+            </div>
+            <div class="info-card">
+                <h3>Duration</h3>
+                <p>September 2025 - April 2026</p>
+            </div>
+        </div>
+
+        <!-- Team Members -->
+        <section class="team-section">
+            <h2>TEAM MEMBERS</h2>
+            <div class="team-grid">
+                <!-- Member 1 -->
+                <div class="team-member">
+                    <img src="Nebojsa_Menicanin.jpeg" alt="Nebojsa Menicanin" class="member-photo">
+                    <div class="member-info">
+                        <h3 class="member-name">Nebojsa Menicanin</h3>
+                        <p class="member-role">Project Lead - Embedded Systems</p>
+                        <ul class="member-responsibilities">
+                            <li>Project Management</li>
+                            <li>Signal processing</li>
+                            <li>RF data conversion</li>
+                            <li>UART-based data transmission</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Member 2 -->
+                <div class="team-member">
+                    <img src="Maximilian_Wehinger.jpeg" alt="Maximilian Wehinger" class="member-photo">
+                    <div class="member-info">
+                        <h3 class="member-name">Maximilian Wehinger</h3>
+                        <p class="member-role">RF Systems Engineer</p>
+                        <ul class="member-responsibilities">
+                            <li>High-frequency transmitter & receiver development</li>
+                            <li>RF circuit design</li>
+                            <li>Signal transmission architecture</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Member 3 -->
+                <div class="team-member">
+                    <img src="Tobias_Heinzle.jpeg" alt="Tobias Heinzle" class="member-photo">
+                    <div class="member-info">
+                        <h3 class="member-name">Tobias Heinzle</h3>
+                        <p class="member-role">Software & Communication Engineer</p>
+                        <ul class="member-responsibilities">
+                            <li>UART protocol development</li>
+                            <li>Web interface development</li>
+                            <li>ESP system control</li>
+                            <li>System integration</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Project Stats -->
+        <section class="stats-section">
+            <h2>PROJECT STATS</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">3,000+</div>
+                    <div class="stat-label">Lines of Code</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Months Development Period</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">Custom RF<br>Transceiver</div>
+                    <div class="stat-sublabel">Self-designed and developed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Coffee Consumed</div>
+                </div>
+            </div>
+
+            <!-- Acknowledgments -->
+            <div class="acknowledgments">
+                <h2>ACKNOWLEDGMENTS</h2>
+                <p>
+                    Special thanks to <span class="highlight">Mr. Bischof</span> and everyone at 
+                    <span class="highlight">HTL Rankweil</span> who supported us with their guidance and expertise.
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 HF-Transceiver Project – HTL Rankweil. All rights reserved.</p>
+    </footer>
+</body>
+</html>

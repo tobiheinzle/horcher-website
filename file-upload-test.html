@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            background: #0d1117;
+            color: white;
+        }
+        .test-btn {
+            background: #1f6feb;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+        .test-btn:hover {
+            background: #1a5bcc;
+        }
+        #log {
+            background: #161b22;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>File Upload Debug Test</h1>
+    
+    <input type="file" id="file-input" accept="image/*" style="display: none;">
+    <button class="test-btn" id="attach-btn">📎 Click to Upload Image</button>
+    
+    <div id="log"></div>
+
+    <script>
+        const fileInput = document.getElementById("file-input");
+        const attachBtn = document.getElementById("attach-btn");
+        const log = document.getElementById("log");
+
+        function addLog(msg) {
+            log.textContent += msg + '\n';
+            console.log(msg);
+        }
+
+        addLog('✅ Page loaded');
+        addLog('📎 File input element: ' + (fileInput ? 'Found' : 'NOT FOUND'));
+        addLog('📎 Attach button element: ' + (attachBtn ? 'Found' : 'NOT FOUND'));
+
+        if (attachBtn && fileInput) {
+            addLog('✅ Setting up event listeners...');
+            
+            attachBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                addLog('🖱️ Button clicked!');
+                addLog('📂 Opening file picker...');
+                fileInput.click();
+            });
+
+            fileInput.addEventListener("change", (e) => {
+                addLog('📁 File input changed!');
+                addLog('   Files count: ' + e.target.files.length);
+                
+                if (e.target.files.length > 0) {
+                    const file = e.target.files[0];
+                    addLog('   ✅ File selected:');
+                    addLog('      Name: ' + file.name);
+                    addLog('      Size: ' + file.size + ' bytes');
+                    addLog('      Type: ' + file.type);
+                    
+                    // Show preview
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        addLog('   ✅ File read successfully');
+                        const img = document.createElement('img');
+                        img.src = event.target.result;
+                        img.style.maxWidth = '300px';
+                        img.style.marginTop = '20px';
+                        img.style.borderRadius = '8px';
+                        document.body.appendChild(img);
+                    };
+                    reader.onerror = (error) => {
+                        addLog('   ❌ Error reading file: ' + error);
+                    };
+                    reader.readAsDataURL(file);
+                }
+                
+                fileInput.value = '';
+            });
+            
+            addLog('✅ Event listeners set up successfully!');
+        } else {
+            addLog('❌ FAILED to find elements!');
+        }
+    </script>
+</body>
+</html>

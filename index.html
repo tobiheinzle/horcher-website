@@ -21,7 +21,7 @@
         }
 
         .main-container {
-            background: #1a1f2e;
+            background: #0F182B;
             border-radius: 24px;
             overflow: hidden;
             max-width: 1800px;
@@ -82,7 +82,7 @@
 
         .contact-btn {
             background: white;
-            color: #1a1f2e;
+            color: #0F182B;
             padding: 12px 32px;
             border-radius: 50px;
             text-decoration: none;
@@ -102,13 +102,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 80px;
+            gap: 120px;
         }
 
         .hero-content {
             flex: 1;
             max-width: 900px;
-            margin-top: -200px; /* bewusstes Desktop-Tuning */
+            margin-top: -200px;
         }
 
         .hero h1 {
@@ -170,7 +170,7 @@
             width: 600px;
             height: 600px;
             margin-left: auto;
-            margin-right: -80px;
+            margin-right: -120px;
             position: relative;
             top: 50px;
         }
@@ -211,19 +211,43 @@
             line-height: 1.5;
         }
 
+        /* ================= FOOTER ================= */
+        footer {
+            background: #0d1117;
+            padding: 30px;
+            text-align: center;
+            margin-top: 60px;
+            border-top: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        footer p {
+            color: #B8C1E0;
+            font-size: 16px;
+            margin: 0;
+        }
 
         /* ================= RESPONSIVE ================= */
 
         /* Laptop */
         @media (max-width: 1400px) {
-            .hero-content { margin-top: -140px; }
+            .hero {
+                gap: 100px;
+            }
+            
+            .hero-content { 
+                margin-top: -140px; 
+            }
+            
             .hero-image {
                 width: 520px;
                 height: 520px;
                 top: 30px;
-                margin-right: -40px;
+                margin-right: -60px;
             }
-            .feature-card { margin-top: -180px; }
+            
+            .feature-card { 
+                margin-top: -180px; 
+            }
         }
 
         /* Tablet */
@@ -232,6 +256,7 @@
                 flex-direction: column;
                 align-items: center;
                 text-align: center;
+                gap: 40px;
             }
 
             .hero-content {
@@ -290,6 +315,15 @@
                 gap: 24px;
             }
 
+            footer {
+                padding: 24px;
+                margin-top: 40px;
+            }
+
+            footer p {
+                font-size: 14px;
+            }
+
             #log {
                 margin: 24px;
             }
@@ -306,14 +340,14 @@
                 <div class="logo-icon">
                     <img src="logo-icon.png" alt="Logo" class="logo-img">
                 </div>
-                <span>Der Horcher</span>
+                <span>Horcher</span>
             </div>
 
             <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
+                <li><a href="index.html">Home</a></li>
                 <li><a href="#features">Features</a></li>
                 <li><a href="#project">Project</a></li>
-                <li><a href="#team">Our Team</a></li>
+                <li><a href="team.html">Our Team</a></li>
             </ul>
 
             <a href="#contact" class="contact-btn">Contact</a>
@@ -329,7 +363,7 @@
             </p>
 
             <div class="hero-buttons">
-                <a href="dashboard.html" class="btn-primary">
+                <a href="device-selection.html" class="btn-primary">
                     Open Dashboard
                 </a>
 
@@ -346,19 +380,22 @@
 
     <div class="features">
         <div class="feature-card">
-            <h3>UART Communication</h3>
-            <p>Reliable, low-latency communication for real-time interaction.</p>
+            <h3>Embedded RF Architecture</h3>
+            <p>Web-controlled ESP–STM system with real-time 433 MHz communication.</p>
         </div>
 
         <div class="feature-card">
-            <h3>System Monitoring</h3>
-            <p>Live insights into device status, signal strength and uptime.</p>
+            <h3>Product Overview</h3>
+            <p>A dedicated website showcasing the system and its capabilities.</p>
         </div>
     </div>
 
 </div>
 
-<script src="websocket.js"></script>
+<!-- Footer -->
+<footer>
+    <p>© 2025 HF-Transceiver Project – HTL Rankweil. All rights reserved.</p>
+</footer>
 
 </body>
 </html>

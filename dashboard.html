@@ -564,22 +564,22 @@
             </div>
 
             <!-- Connection Status -->
-            <div class="connection-status" id="connection-status">
+            <div class="connection-status" id="connection-status-sidebar">
                 <div class="status-label">Connected Device</div>
                 <div class="status-device">
                     <span class="status-indicator"></span>
-                    <span id="device-name">ESP Device 1</span>
+                    <span id="device-name">Loading...</span>
                 </div>
             </div>
 
             <nav class="nav-menu">
-                <a href="#" class="nav-item">
+                <a href="#" class="nav-item" id="new-chat-btn">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                         <path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2"/>
                     </svg>
                     New Chat
                 </a>
-                <a href="#" class="nav-item">
+                <a href="#" class="nav-item" id="delete-history-btn">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                         <path d="M3 8h10" stroke="currentColor" stroke-width="2"/>
                     </svg>
@@ -634,5 +634,31 @@
 
     <script src="websocket.js"></script>
     <script src="dashboard.js"></script>
+    <script>
+        /* =====================================================
+           DEVICE DISPLAY UPDATE FUNCTION
+           This syncs the sidebar device name with WebSocket
+           ===================================================== */
+        
+        window.updateDeviceDisplay = function(espId) {
+            const deviceNameElement = document.getElementById('device-name');
+            if (deviceNameElement) {
+                // Convert "ESP_1" to "ESP Device 1"
+                const displayName = espId.replace('_', ' Device ');
+                deviceNameElement.textContent = displayName;
+                console.log('✅ Updated sidebar device display:', displayName);
+            } else {
+                console.warn('⚠️ device-name element not found');
+            }
+        };
+
+        // On page load, set initial device from localStorage
+        window.addEventListener('DOMContentLoaded', function() {
+            const selectedESP = localStorage.getItem("selectedESP");
+            if (selectedESP) {
+                window.updateDeviceDisplay(selectedESP);
+            }
+        });
+    </script>
 </body>
 </html>

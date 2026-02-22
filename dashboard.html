@@ -118,42 +118,50 @@
         }
 
         /* ========================================
-           CONNECTION STATUS
+           CONNECTION STATUS - full-width green bar
            ======================================== */
 
         .connection-status {
-            padding: 12px 16px;
-            border-bottom: 1px solid #30363d;
-            background: rgba(73, 181, 254, 0.1);
+            padding: 14px 16px;
+            background: #10b981;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .status-label {
-            font-size: 11px;
-            color: #8b949e;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-bottom: 6px;
+            display: none;
         }
 
         .status-device {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             font-size: 14px;
-            color: #e6edf3;
+            font-weight: 600;
+            color: #ffffff;
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .status-indicator {
-            width: 8px;
-            height: 8px;
+            width: 9px;
+            height: 9px;
             border-radius: 50%;
-            background-color: #10b981;
+            background-color: rgba(255,255,255,0.85);
+            flex-shrink: 0;
             animation: pulse-glow 2s ease-in-out infinite;
+        }
+
+        .connection-status.disconnected {
+            background: #ef4444;
         }
 
         @keyframes pulse-glow {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+            50% { opacity: 0.4; }
         }
 
         /* ========================================
@@ -565,10 +573,9 @@
 
             <!-- Connection Status -->
             <div class="connection-status" id="connection-status-sidebar">
-                <div class="status-label">Connected Device</div>
                 <div class="status-device">
                     <span class="status-indicator"></span>
-                    <span id="device-name">Loading...</span>
+                    <span id="device-name">Connecting...</span>
                 </div>
             </div>
 
@@ -640,23 +647,33 @@
            This syncs the sidebar device name with WebSocket
            ===================================================== */
         
+        // Convert "ESP_1" → "Connected to ESP 1"
+        function formatDeviceName(espId) {
+            return 'Connected to ' + espId.replace('_', ' ');
+        }
+
         window.updateDeviceDisplay = function(espId) {
-            const deviceNameElement = document.getElementById('device-name');
-            if (deviceNameElement) {
-                // Convert "ESP_1" to "ESP Device 1"
-                const displayName = espId.replace('_', ' Device ');
-                deviceNameElement.textContent = displayName;
-                console.log('✅ Updated sidebar device display:', displayName);
-            } else {
-                console.warn('⚠️ device-name element not found');
-            }
+            const bar   = document.getElementById('connection-status-sidebar');
+            const label = document.getElementById('device-name');
+            if (!bar || !label) return;
+            label.textContent = formatDeviceName(espId);
+            bar.classList.remove('disconnected');
         };
 
-        // On page load, set initial device from localStorage
+        window.setDeviceDisconnected = function(reason) {
+            const bar   = document.getElementById('connection-status-sidebar');
+            const label = document.getElementById('device-name');
+            if (!bar || !label) return;
+            label.textContent = reason || 'Disconnected';
+            bar.classList.add('disconnected');
+        };
+
+        // On page load, show device from localStorage immediately
         window.addEventListener('DOMContentLoaded', function() {
-            const selectedESP = localStorage.getItem("selectedESP");
+            const selectedESP = localStorage.getItem('selectedESP');
             if (selectedESP) {
-                window.updateDeviceDisplay(selectedESP);
+                document.getElementById('device-name').textContent =
+                    formatDeviceName(selectedESP);
             }
         });
     </script>

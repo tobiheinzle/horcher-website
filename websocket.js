@@ -229,20 +229,27 @@ function handleImageChunk(payload) {
 
         const messageDiv = document.createElement("div");
         messageDiv.className = "message assistant-message";
+        
         const contentDiv = document.createElement("div");
         contentDiv.className = "message-content";
+        
         const img = document.createElement("img");
         img.src = url;
         img.style.maxWidth = "100%";
         img.style.borderRadius = "12px";
         
+        // FIX: Add img to contentDiv FIRST
         contentDiv.appendChild(img);
+        
+        // Then add contentDiv to messageDiv
         messageDiv.appendChild(contentDiv);
+        
+        // Finally add messageDiv to chat
         document.querySelector(".chat-messages").appendChild(messageDiv);
         document.querySelector(".chat-messages").scrollTop = document.querySelector(".chat-messages").scrollHeight;
 
         imageChunks = [];
-        console.log("🖼️ Image received");
+        console.log("Image received");
         return;
     }
 

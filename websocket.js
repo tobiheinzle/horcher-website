@@ -15,6 +15,10 @@ let audioChunks = [];
    CONNECTION
    ===================================================== */
 
+let reconnectTimer = null;
+let reconnectAttempts = 0;
+const MAX_RECONNECT_DELAY = 5000; // Max 5 seconds between reconnects
+
 function connectBackend() {
     if (ws && ws.readyState === WebSocket.OPEN) return;
     if (connecting) return;
@@ -38,6 +42,7 @@ function connectBackend() {
     ws.onopen = () => {
         console.log(`✅ WebSocket connected - requesting access to ${selectedESP}...`);
         connecting = false;
+        reconnectAttempts = 0; // Reset reconnect counter on successful connection
         ws.send(`WEB_CONNECT:${selectedESP}`);
     };
 
@@ -98,16 +103,21 @@ function connectBackend() {
     };
 
     ws.onclose = () => {
-        console.warn("❌ Disconnected");
+        console.warn("❌ Disconnected - attempting to reconnect...");
         ws = null;
         connecting = false;
         connectionAccepted = false;
-        showConnectionStatus("Disconnected - redirecting...", false);
+        showConnectionStatus("Reconnecting...", false);
         
-        // Redirect to selection page after disconnect
-        setTimeout(() => {
-            window.location.href = "device-selection.html";
-        }, 2000);
+        // AUTO-RECONNECT with exponential backoff
+        reconnectAttempts++;
+        const delay = Math.min(1000 * reconnectAttempts, MAX_RECONNECT_DELAY);
+        
+        console.log(`🔄 Reconnecting in ${delay}ms (attempt ${reconnectAttempts})...`);
+        
+        reconnectTimer = setTimeout(() => {
+            connectBackend();
+        }, delay);
     };
 
     ws.onerror = (error) => {
@@ -116,39 +126,6 @@ function connectBackend() {
         connectionAccepted = false;
         if (ws) ws.close();
     };
-}
-
-/* =====================================================
-   CONNECTION STATUS UI
-   ===================================================== */
-
-function showConnectionStatus(message, isConnected) {
-    let statusDiv = document.getElementById('connection-status');
-    
-    if (!statusDiv) {
-        statusDiv = document.createElement('div');
-        statusDiv.id = 'connection-status';
-        statusDiv.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-weight: 600;
-            z-index: 10000;
-        `;
-        document.body.appendChild(statusDiv);
-    }
-    
-    if (isConnected) {
-        statusDiv.style.background = '#10b981';
-        statusDiv.style.color = 'white';
-    } else {
-        statusDiv.style.background = '#ef4444';
-        statusDiv.style.color = 'white';
-    }
-    
-    statusDiv.textContent = message;
 }
 
 /* =====================================================

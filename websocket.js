@@ -102,22 +102,27 @@ function connectBackend() {
         }
     };
 
-    ws.onclose = () => {
-        console.warn("❌ Disconnected - attempting to reconnect...");
+    ws.onclose = (event) => {
+        console.warn("❌ Disconnected - Code:", event.code);
         ws = null;
         connecting = false;
         connectionAccepted = false;
-        showConnectionStatus("Reconnecting...", false);
         
-        // AUTO-RECONNECT with exponential backoff
-        reconnectAttempts++;
-        const delay = Math.min(1000 * reconnectAttempts, MAX_RECONNECT_DELAY);
-        
-        console.log(`🔄 Reconnecting in ${delay}ms (attempt ${reconnectAttempts})...`);
-        
-        reconnectTimer = setTimeout(() => {
-            connectBackend();
-        }, delay);
+        // Only auto-reconnect if it wasn't a normal closure (1000 = normal, 1001 = going away)
+        if (event.code !== 1000 && event.code !== 1001) {
+            showConnectionStatus("Reconnecting...", false);
+            
+            reconnectAttempts++;
+            const delay = Math.min(1000 * reconnectAttempts, MAX_RECONNECT_DELAY);
+            
+            console.log(`🔄 Reconnecting in ${delay}ms (attempt ${reconnectAttempts})...`);
+            
+            reconnectTimer = setTimeout(() => {
+                connectBackend();
+            }, delay);
+        } else {
+            showConnectionStatus("Disconnected", false);
+        }
     };
 
     ws.onerror = (error) => {
@@ -129,7 +134,40 @@ function connectBackend() {
 }
 
 /* =====================================================
-   SENDING - Same as before
+   CONNECTION STATUS UI
+   ===================================================== */
+
+function showConnectionStatus(message, isConnected) {
+    let statusDiv = document.getElementById('connection-status-overlay');
+    
+    if (!statusDiv) {
+        statusDiv = document.createElement('div');
+        statusDiv.id = 'connection-status-overlay';
+        statusDiv.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            z-index: 10000;
+        `;
+        document.body.appendChild(statusDiv);
+    }
+    
+    if (isConnected) {
+        statusDiv.style.background = '#10b981';
+        statusDiv.style.color = 'white';
+    } else {
+        statusDiv.style.background = '#ef4444';
+        statusDiv.style.color = 'white';
+    }
+    
+    statusDiv.textContent = message;
+}
+
+/* =====================================================
+   SENDING
    ===================================================== */
 
 function sendText(text) {
@@ -194,7 +232,7 @@ async function sendAudio(blob) {
 }
 
 /* =====================================================
-   RECEIVING - Same as before
+   RECEIVING
    ===================================================== */
 
 function handleImageChunk(payload) {
@@ -215,22 +253,22 @@ function handleImageChunk(payload) {
         img.style.maxWidth = "100%";
         img.style.borderRadius = "12px";
         
-        // FIX: Add img to contentDiv FIRST
         contentDiv.appendChild(img);
-        
-        // Then add contentDiv to messageDiv
         messageDiv.appendChild(contentDiv);
         
-        // Finally add messageDiv to chat
-        document.querySelector(".chat-messages").appendChild(messageDiv);
-        document.querySelector(".chat-messages").scrollTop = document.querySelector(".chat-messages").scrollHeight;
+        const messagesContainer = document.querySelector(".chat-messages");
+        if (messagesContainer) {
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
 
         imageChunks = [];
-        console.log("Image received");
+        console.log("🖼️ Image received");
         return;
     }
 
-    imageChunks.push(payload);
+    // Convert Uint8Array to ArrayBuffer for Blob
+    imageChunks.push(payload.buffer.slice(payload.byteOffset, payload.byteOffset + payload.byteLength));
 }
 
 function handleAudioChunk(payload) {
@@ -242,8 +280,10 @@ function handleAudioChunk(payload) {
 
         const messageDiv = document.createElement("div");
         messageDiv.className = "message assistant-message";
+        
         const contentDiv = document.createElement("div");
         contentDiv.className = "message-content";
+        
         const audio = document.createElement("audio");
         audio.src = url;
         audio.controls = true;
@@ -252,15 +292,20 @@ function handleAudioChunk(payload) {
         
         contentDiv.appendChild(audio);
         messageDiv.appendChild(contentDiv);
-        document.querySelector(".chat-messages").appendChild(messageDiv);
-        document.querySelector(".chat-messages").scrollTop = document.querySelector(".chat-messages").scrollHeight;
+        
+        const messagesContainer = document.querySelector(".chat-messages");
+        if (messagesContainer) {
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
 
         audioChunks = [];
         console.log("🔊 Audio received");
         return;
     }
 
-    audioChunks.push(payload);
+    // Convert Uint8Array to ArrayBuffer for Blob
+    audioChunks.push(payload.buffer.slice(payload.byteOffset, payload.byteOffset + payload.byteLength));
 }
 
 /* =====================================================

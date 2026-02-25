@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project - Horcher</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #0d1117;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .main-container {
+            background: #0F182B;
+            border-radius: 24px;
+            overflow: hidden;
+            max-width: 1800px;
+            margin: 0 auto;
+            padding-bottom: 60px;
+        }
+
+        /* ================= NAVBAR ================= */
+        header {
+            padding: 15px 100px;
+            border-bottom: 3px solid rgba(255, 255, 255, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #49B5FE;
+            font-size: 22px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 22px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #4A9FFF;
+        }
+
+        .contact-btn {
+            background: white;
+            color: #0F182B;
+            padding: 12px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 22px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .contact-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+        }
+
+        /* ================= MAIN CONTENT ================= */
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 100px 80px;
+            text-align: center;
+        }
+
+        .badge {
+            background: #162132;
+            border: 2px solid #49B5FE;
+            color: #49B5FE;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 6px 18px;
+            border-radius: 50px;
+            margin-bottom: 28px;
+        }
+
+        .content h1 {
+            color: white;
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .content > p {
+            color: #B8C1E0;
+            font-size: 20px;
+            line-height: 1.7;
+            max-width: 680px;
+            margin-bottom: 80px;
+        }
+
+        /* ================= STATUS CARDS ================= */
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            max-width: 1300px;
+            width: 100%;
+            margin-bottom: 80px;
+        }
+
+        .status-card {
+            background: #162132;
+            border-radius: 20px;
+            padding: 32px 28px;
+        }
+
+        .status-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+        }
+
+        .status-dot.done     { background: #49B5FE; }
+        .status-dot.progress {
+            background: #A855F7;
+            box-shadow: 0 0 8px rgba(168, 85, 247, 0.6);
+            animation: pulse 2s infinite;
+        }
+        .status-dot.pending  { background: #3a4a60; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50%       { opacity: 0.4; }
+        }
+
+        .status-card h3 {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .status-card p {
+            color: #B8C1E0;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .status-label {
+            display: inline-block;
+            margin-top: 14px;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .status-label.done     { color: #49B5FE; }
+        .status-label.progress { color: #A855F7; }
+        .status-label.pending  { color: #3a4a60; }
+
+        /* ================= ETA BOX ================= */
+        .eta-box {
+            border: 2px solid #49B5FE;
+            border-radius: 20px;
+            padding: 40px 60px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .eta-box h2 {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .eta-box p {
+            color: #B8C1E0;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .eta-box .highlight {
+            color: #49B5FE;
+            font-weight: 600;
+        }
+
+        /* ================= FOOTER ================= */
+        footer {
+            background: #0d1117;
+            padding: 30px;
+            text-align: center;
+            margin-top: 60px;
+            border-top: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        footer p {
+            color: #B8C1E0;
+            font-size: 16px;
+            margin: 0;
+        }
+
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 1200px) {
+            .status-grid {
+                grid-template-columns: repeat(2, 1fr);
+                max-width: 700px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .status-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 12px 24px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .content {
+                padding: 80px 24px;
+            }
+
+            .content h1 {
+                font-size: 36px;
+            }
+
+            .eta-box {
+                padding: 28px 24px;
+            }
+
+            footer {
+                padding: 24px;
+                margin-top: 40px;
+            }
+
+            footer p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+
+        <!-- Navbar -->
+        <header>
+            <nav>
+                <a href="index.html" class="logo">
+                    <img src="logo-icon.png" alt="Logo" class="logo-icon">
+                    <span>Horcher</span>
+                </a>
+
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="features.html">Features</a></li>
+                    <li><a href="project.html">Project</a></li>
+                    <li><a href="team.html">Our Team</a></li>
+                </ul>
+
+                <a href="contact.html" class="contact-btn">Contact</a>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <div class="content">
+
+            <div class="badge">Work in Progress</div>
+
+            <h1>Documentation Coming Soon</h1>
+
+            <p>
+                The project documentation is being finalized alongside the system itself.
+                Once the HF-Transceiver is fully assembled, tested, and documented,
+                this page will provide a complete technical deep-dive into every layer of the Horcher system.
+            </p>
+
+            <!-- Status Cards -->
+            <div class="status-grid">
+                <div class="status-card">
+                    <div class="status-dot done"></div>
+                    <h3>Web Interface</h3>
+                    <p>Dashboard, WebSocket relay, and backend infrastructure</p>
+                    <span class="status-label done">Complete</span>
+                </div>
+                <div class="status-card">
+                    <div class="status-dot done"></div>
+                    <h3>RF Hardware</h3>
+                    <p>Transmitter and receiver PCBs built and tested — final integration pending</p>
+                    <span class="status-label done">Complete</span>
+                </div>
+                <div class="status-card">
+                    <div class="status-dot progress"></div>
+                    <h3>System Integration</h3>
+                    <p>Combining all components into a single working product and running end-to-end tests</p>
+                    <span class="status-label progress">In Progress</span>
+                </div>
+                <div class="status-card">
+                    <div class="status-dot pending"></div>
+                    <h3>Full Documentation</h3>
+                    <p>Technical write-up, diagrams, and test results</p>
+                    <span class="status-label pending">Pending</span>
+                </div>
+            </div>
+
+            <!-- ETA -->
+            <div class="eta-box">
+                <h2>Expected Completion</h2>
+                <p>
+                    The full project documentation will be published by <span class="highlight">April 2026</span>,
+                    following the official diploma thesis submission at HTL Rankweil.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 HF-Transceiver / Horcher Project – HTL Rankweil. All rights reserved.</p>
+    </footer>
+</body>
+</html>

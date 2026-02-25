@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn More - Horcher</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #0d1117;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* ================= CONTAINER ================= */
+        .container {
+            background: #0F182B;
+            border-radius: 24px;
+            padding: 60px;
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: white;
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .subtitle {
+            color: #B8C1E0;
+            font-size: 18px;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        /* ================= INFO CARDS ================= */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .info-card {
+            background: #162132;
+            border-radius: 20px;
+            padding: 28px;
+            text-align: left;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .info-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .info-card h3 {
+            color: white;
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .info-card p {
+            color: #B8C1E0;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* ================= GITHUB NOTE ================= */
+        .github-note {
+            background: #162132;
+            border-radius: 20px;
+            padding: 24px 28px;
+            margin-top: 20px;
+            margin-bottom: 0;
+            text-align: center;
+        }
+
+        .github-note p {
+            color: #B8C1E0;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+
+        .github-note .highlight {
+            color: #49B5FE;
+            font-weight: 600;
+        }
+
+        /* ================= GITHUB BUTTON ================= */
+        .github-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            background: linear-gradient(135deg, #D946EF, #A855F7);
+            color: white;
+            padding: 18px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            margin-top: 32px;
+            margin-bottom: 24px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .github-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(217, 70, 239, 0.4);
+        }
+
+        /* ================= BACK LINK ================= */
+        .back-link a {
+            color: #4A9FFF;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: gap 0.3s;
+        }
+
+        .back-link a:hover {
+            gap: 12px;
+        }
+
+        /* ================= FOOTER ================= */
+        footer {
+            background: #0d1117;
+            padding: 30px;
+            text-align: center;
+            margin-top: 60px;
+            border-top: 2px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+        }
+
+        footer p {
+            color: #B8C1E0;
+            font-size: 16px;
+            margin: 0;
+        }
+
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 24px;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            footer {
+                padding: 24px;
+                margin-top: 40px;
+            }
+
+            footer p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>About the Project</h1>
+        <p class="subtitle">Here's a quick overview of what Horcher is and how it works.</p>
+
+        <div class="cards-grid">
+            <div class="info-card">
+                <h3>Custom 433 MHz RF Transceiver</h3>
+                <p>Self-designed transmitter and receiver PCBs using FSK modulation, controlled by an STM32 microcontroller.</p>
+            </div>
+
+            <div class="info-card">
+                <h3>Custom Binary Protocol</h3>
+                <p>A frame-based UART protocol with CRC16 integrity checking connects the STM32 to the ESP32 WiFi bridge.</p>
+            </div>
+
+            <div class="info-card">
+                <h3>WebSocket Relay Server</h3>
+                <p>A self-hosted Node.js server on Ubuntu routes data between ESP devices and the browser in real time.</p>
+            </div>
+
+            <div class="info-card">
+                <h3>Browser-Based Dashboard</h3>
+                <p>Send text, images, and audio directly to embedded devices from any browser — no installation needed.</p>
+            </div>
+        </div>
+
+        <div class="github-note">
+            <p>For the full technical documentation, source code, and implementation details, visit our <span class="highlight">GitHub repository</span> — everything is open source.</p>
+        </div>
+
+        <a href="https://github.com/tobiheinzle/HF-Transceiver-Horcher" target="_blank" class="github-btn">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
+                <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+            </svg>
+            View on GitHub
+        </a>
+
+        <div class="back-link">
+            <a href="index.html">← Back to Home</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 HF-Transceiver / Horcher Project – HTL Rankweil. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

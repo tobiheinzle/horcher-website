@@ -332,27 +332,22 @@
             margin-bottom: 50px;
         }
 
-        .demo-container {
-            background: #162132;
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 900px;
-            margin: 0 auto;
-            text-align: center;
-        }
+.demo-container {
+    background: #162132;
+    border-radius: 20px;
+    padding: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+}
 
-        .demo-placeholder {
-            background: #0F182B;
-            border: 2px dashed #49B5FE;
-            border-radius: 12px;
-            padding: 80px 40px;
-            color: #B8C1E0;
-            font-size: 18px;
-        }
-
-        .demo-placeholder svg {
-            margin-bottom: 20px;
-        }
+.demo-video {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 16px;
+    display: block;
+    background: #0F182B;
+}
 
         /* ================= CTA SECTION ================= */
         .cta-section {
@@ -506,10 +501,14 @@
                 font-size: 20px;
             }
 
-            .demo-placeholder {
-                padding: 50px 24px;
-                font-size: 16px;
-            }
+.demo-container {
+    padding: 10px;
+    border-radius: 16px;
+}
+
+.demo-video {
+    border-radius: 12px;
+}
 
             .cta-content {
                 padding: 32px 24px;
@@ -726,17 +725,14 @@
         <section class="demo-section">
             <h2>SEE IT IN ACTION</h2>
             <div class="demo-container">
-                <div class="demo-placeholder">
-                    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#49B5FE" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <polygon points="10 8 16 12 10 16 10 8"/>
-                    </svg>
-                    <div>Demo video or GIF coming soon</div>
-                    <div style="font-size: 14px; margin-top: 10px; color: #8b949e;">
-                        Watch a live demonstration of sending messages and media
-                    </div>
-                </div>
-            </div>
+    <video class="demo-video"
+           controls
+           playsinline
+           preload="metadata">
+        <source src="demo.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</div>
         </section>
 
         <!-- Call to Action -->

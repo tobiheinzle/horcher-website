@@ -89,6 +89,85 @@
             box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
         }
 
+        /* ================= HAMBURGER BUTTON ================= */
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            z-index: 1001;
+            width: 44px;
+            height: 44px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 28px;
+            height: 3px;
+            background: white;
+            border-radius: 2px;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: translateY(9px) rotate(45deg);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: translateY(-9px) rotate(-45deg);
+        }
+
+        /* ================= MOBILE MENU OVERLAY ================= */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 24, 43, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .mobile-menu ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            text-align: center;
+        }
+
+        .mobile-menu a {
+            color: white;
+            text-decoration: none;
+            font-size: 32px;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .mobile-menu a:hover {
+            color: #49B5FE;
+        }
+
         /* ================= HERO SECTION ================= */
         .hero-section {
             text-align: center;
@@ -136,9 +215,26 @@
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
         }
 
+        /* SVG-Icon Container statt Emoji */
         .feature-icon {
-            font-size: 42px;
-            margin-bottom: 16px;
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: rgba(73, 181, 254, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .feature-icon svg {
+            width: 30px;
+            height: 30px;
+            stroke: #49B5FE;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
         .feature-card h3 {
@@ -196,7 +292,6 @@
             padding: 50px;
             max-width: 1000px;
             margin: 0 auto;
-            overflow-x: auto;
         }
 
         .flow-container {
@@ -205,7 +300,6 @@
             justify-content: center;
             gap: 20px;
             flex-wrap: wrap;
-            min-width: 700px;
         }
 
         .flow-box {
@@ -336,6 +430,14 @@
                 display: none;
             }
 
+            .contact-btn {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
             .hero-section,
             .features-section,
             .architecture-section,
@@ -345,16 +447,84 @@
                 padding-right: 24px;
             }
 
+            .hero-section {
+                padding-top: 40px;
+                padding-bottom: 20px;
+            }
+
             .hero-section h1 {
                 font-size: 36px;
             }
 
+            .hero-section .subtitle {
+                font-size: 18px;
+                margin-bottom: 30px;
+            }
+
             .features-grid {
                 grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .feature-card {
+                padding: 24px;
+            }
+
+            .feature-card h3 {
+                font-size: 22px;
+            }
+
+            .architecture-section {
+                padding-top: 40px;
+                padding-bottom: 40px;
+            }
+
+            .architecture-section h2,
+            .demo-section h2 {
+                font-size: 30px;
+                margin-bottom: 30px;
             }
 
             .architecture-diagram {
                 padding: 24px;
+            }
+
+            /* Flow-Diagram auf Mobile vertikal anordnen */
+            .flow-container {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .flow-box {
+                width: 100%;
+                max-width: 240px;
+                padding: 16px 20px;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+                font-size: 20px;
+            }
+
+            .demo-placeholder {
+                padding: 50px 24px;
+                font-size: 16px;
+            }
+
+            .cta-content {
+                padding: 32px 24px;
+            }
+
+            .cta-content h2 {
+                font-size: 28px;
+            }
+
+            .cta-content p {
+                font-size: 17px;
+            }
+
+            .mobile-menu a {
+                font-size: 28px;
             }
 
             footer {
@@ -386,8 +556,25 @@
                 </ul>
 
                 <a href="contact.html" class="contact-btn">Contact</a>
+
+                <button class="hamburger" id="hamburger" aria-label="Menü öffnen" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </nav>
         </header>
+
+        <!-- Mobile Menu Overlay -->
+        <div class="mobile-menu" id="mobileMenu">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="features.html">Features</a></li>
+                <li><a href="project.html">Project</a></li>
+                <li><a href="team.html">Our Team</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
 
         <!-- Hero Section -->
         <section class="hero-section">
@@ -398,9 +585,14 @@
         <!-- Features Grid -->
         <section class="features-section">
             <div class="features-grid">
-                <!-- Feature 1 -->
+
+                <!-- Feature 1: Real-Time UART (Lightning Bolt Icon) -->
                 <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                        </svg>
+                    </div>
                     <h3>Real-Time UART Communication</h3>
                     <p>Fast and reliable data transmission between your browser and embedded devices.</p>
                     <ul class="feature-highlights">
@@ -411,9 +603,15 @@
                     </ul>
                 </div>
 
-                <!-- Feature 2 -->
+                <!-- Feature 2: Web Dashboard (Monitor Icon) -->
                 <div class="feature-card">
-                    <div class="feature-icon">💻</div>
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                            <line x1="8" y1="21" x2="16" y2="21"/>
+                            <line x1="12" y1="17" x2="12" y2="21"/>
+                        </svg>
+                    </div>
                     <h3>Web-Based Dashboard</h3>
                     <p>Control your ESP devices directly from your browser with an intuitive chat interface.</p>
                     <ul class="feature-highlights">
@@ -424,9 +622,21 @@
                     </ul>
                 </div>
 
-                <!-- Feature 3 -->
+                <!-- Feature 3: Multi-Device (Network/Plug Icon) -->
                 <div class="feature-card">
-                    <div class="feature-icon">🔌</div>
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="3"/>
+                            <circle cx="4" cy="6" r="2"/>
+                            <circle cx="20" cy="6" r="2"/>
+                            <circle cx="4" cy="18" r="2"/>
+                            <circle cx="20" cy="18" r="2"/>
+                            <line x1="6" y1="6" x2="10" y2="10"/>
+                            <line x1="18" y1="6" x2="14" y2="10"/>
+                            <line x1="6" y1="18" x2="10" y2="14"/>
+                            <line x1="18" y1="18" x2="14" y2="14"/>
+                        </svg>
+                    </div>
                     <h3>Multi-Device Support</h3>
                     <p>Connect to multiple ESP32 devices with exclusive access control.</p>
                     <ul class="feature-highlights">
@@ -437,9 +647,16 @@
                     </ul>
                 </div>
 
-                <!-- Feature 4 -->
+                <!-- Feature 4: 433 MHz RF (Wireless Signal Icon) -->
                 <div class="feature-card">
-                    <div class="feature-icon">📡</div>
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M5 12.55a11 11 0 0 1 14.08 0"/>
+                            <path d="M1.42 9a16 16 0 0 1 21.16 0"/>
+                            <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+                            <line x1="12" y1="20" x2="12.01" y2="20"/>
+                        </svg>
+                    </div>
                     <h3>433 MHz RF Transmission</h3>
                     <p>Short-range wireless communication powered by custom RF modules.</p>
                     <ul class="feature-highlights">
@@ -450,9 +667,15 @@
                     </ul>
                 </div>
 
-                <!-- Feature 5 -->
+                <!-- Feature 5: Media Support (Image/Camera Icon) -->
                 <div class="feature-card">
-                    <div class="feature-icon">📸</div>
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="3" y="5" width="18" height="14" rx="2" ry="2"/>
+                            <circle cx="12" cy="12" r="3"/>
+                            <line x1="3" y1="9" x2="7" y2="9"/>
+                        </svg>
+                    </div>
                     <h3>Media Support</h3>
                     <p>Send and receive various media types seamlessly through the web interface.</p>
                     <ul class="feature-highlights">
@@ -462,9 +685,13 @@
                     </ul>
                 </div>
 
-                <!-- Feature 6 -->
+                <!-- Feature 6: Conversation History (Chat Bubbles Icon) -->
                 <div class="feature-card">
-                    <div class="feature-icon">💾</div>
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                        </svg>
+                    </div>
                     <h3>Conversation History</h3>
                     <p>Keep track of all your communications with built-in history management.</p>
                     <ul class="feature-highlights">
@@ -473,6 +700,7 @@
                         <li>Start new conversations</li>
                     </ul>
                 </div>
+
             </div>
         </section>
 
@@ -525,5 +753,27 @@
     <footer>
         <p>© 2025 HF-Transceiver Project – HTL Rankweil. All rights reserved.</p>
     </footer>
+
+    <!-- JavaScript für Hamburger-Menü -->
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        hamburger.addEventListener('click', () => {
+            const isActive = hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            hamburger.setAttribute('aria-expanded', isActive);
+            document.body.style.overflow = isActive ? 'hidden' : '';
+        });
+
+        document.querySelectorAll('.mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                hamburger.setAttribute('aria-expanded', 'false');
+                document.body.style.overflow = '';
+            });
+        });
+    </script>
 </body>
 </html>

@@ -267,31 +267,51 @@
         .status-label.progress { color: #A855F7; }
         .status-label.pending  { color: #3a4a60; }
 
-        /* ================= ETA BOX ================= */
-        .eta-box {
+        /* ================= GITHUB DOCS BOX ================= */
+        .docs-box {
             border: 2px solid #49B5FE;
             border-radius: 20px;
             padding: 40px 60px;
-            max-width: 600px;
+            max-width: 700px;
             width: 100%;
+            text-align: center;
         }
 
-        .eta-box h2 {
+        .docs-box h2 {
             color: white;
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 700;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
-        .eta-box p {
+        .docs-box p {
             color: #B8C1E0;
             font-size: 18px;
             line-height: 1.6;
+            margin-bottom: 24px;
         }
 
-        .eta-box .highlight {
-            color: #49B5FE;
+        .docs-btn {
+            background: linear-gradient(135deg, #D946EF, #A855F7);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 50px;
+            text-decoration: none;
             font-weight: 600;
+            font-size: 17px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .docs-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(217, 70, 239, 0.4);
+        }
+
+        .docs-btn svg {
+            flex-shrink: 0;
         }
 
         /* ================= FOOTER ================= */
@@ -356,16 +376,21 @@
                 padding: 24px 20px;
             }
 
-            .eta-box {
+            .docs-box {
                 padding: 28px 24px;
             }
 
-            .eta-box h2 {
+            .docs-box h2 {
                 font-size: 22px;
             }
 
-            .eta-box p {
+            .docs-box p {
                 font-size: 16px;
+            }
+
+            .docs-btn {
+                font-size: 16px;
+                padding: 13px 26px;
             }
 
             .mobile-menu a {
@@ -432,14 +457,14 @@
         <!-- Main Content -->
         <div class="content">
 
-            <div class="badge">Work in Progress</div>
+            <div class="badge">Work Complete</div>
 
-            <h1>Documentation Coming Soon</h1>
+            <h1>Project Documentation</h1>
 
             <p>
-                The project documentation is being finalized alongside the system itself.
-                Once the HF-Transceiver is fully assembled, tested, and documented,
-                this page will provide a complete technical deep-dive into every layer of the Horcher system.
+                The HF-Transceiver "Horcher" is fully assembled, tested, and documented.
+                The complete technical documentation – covering hardware design, firmware,
+                web infrastructure, and test results – is available on our GitHub repository.
             </p>
 
             <!-- Status Cards -->
@@ -457,26 +482,32 @@
                     <span class="status-label done">Complete</span>
                 </div>
                 <div class="status-card">
-                    <div class="status-dot progress"></div>
+                    <div class="status-dot done"></div>
                     <h3>System Integration</h3>
-                    <p>Combining all components into a single working product and running end-to-end tests</p>
-                    <span class="status-label progress">In Progress</span>
+                    <p>All components combined into a single working product with end-to-end tests passed</p>
+                    <span class="status-label done">Complete</span>
                 </div>
                 <div class="status-card">
-                    <div class="status-dot pending"></div>
+                    <div class="status-dot done"></div>
                     <h3>Full Documentation</h3>
-                    <p>Technical write-up, diagrams, and test results</p>
-                    <span class="status-label pending">Pending</span>
+                    <p>Technical write-up, diagrams, and test results published on GitHub</p>
+                    <span class="status-label done">Complete</span>
                 </div>
             </div>
 
-            <!-- ETA -->
-            <div class="eta-box">
-                <h2>Expected Completion</h2>
+            <!-- GitHub Documentation Link -->
+            <div class="docs-box">
+                <h2>View the Full Documentation</h2>
                 <p>
-                    The full project documentation will be published by <span class="highlight">April 2026</span>,
-                    following the official diploma thesis submission at HTL Rankweil.
+                    All technical details, schematics, source code, and test results
+                    are available in our GitHub repository.
                 </p>
+                <a href="https://github.com/tobiheinzle/HF-Transceiver-Horcher" class="docs-btn" target="_blank" rel="noopener">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                        <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                    </svg>
+                    View on GitHub
+                </a>
             </div>
 
         </div>

@@ -1,65 +1,53 @@
-/* =====================================================
-   WEBSOCKET CLIENT - Fixed Version
-   ===================================================== */
+let ws = null;                  // Aktive WebSocket-Verbindung (null = getrennt)
+let connecting = false;         // true = Verbindungsaufbau läuft gerade
+let connectionAccepted = false; // true = ESP hat Verbindung bestätigt
+let selectedESP = null;         // ID des gewählten ESP-Geräts (z.B. "ESP_1")
 
-let ws = null;
-let connecting = false;
-let connectionAccepted = false;
-let selectedESP = null;
-
-// Buffers for incoming media - MUST be separate for each session
+// Eingangspuffer für Bild- und Audio-Fragmente
 let imageChunks = [];
 let audioChunks = [];
 
-/* =====================================================
-   CONNECTION
-   ===================================================== */
-
 let reconnectTimer = null;
 let reconnectAttempts = 0;
-const MAX_RECONNECT_DELAY = 5000;
+const MAX_RECONNECT_DELAY = 5000; // Maximale Wartezeit zwischen Reconnects: 5s
 
+//VERBINDUNGSAUFBAU
 function connectBackend() {
-    if (ws && ws.readyState === WebSocket.OPEN) return;
-    if (connecting) return;
+    if (ws && ws.readyState === WebSocket.OPEN) return; // Bereits verbunden -> abbrechen
+    if (connecting) return;                             // Verbindungsversuch läuft -> abbrechen
 
-    // Get selected ESP from localStorage
+    // ESP-ID aus localStorage laden - fehlt sie -> Auswahlseite
     selectedESP = localStorage.getItem("selectedESP");
-    
     if (!selectedESP) {
-        console.error("No ESP selected - redirecting to selection page");
         window.location.href = "device-selection.html";
         return;
     }
 
-    // Clear old chunks when starting new connection
+    // Zustand zurücksetzen
     imageChunks = [];
     audioChunks = [];
-    
     connecting = true;
     connectionAccepted = false;
     
-    //ws = new WebSocket("ws://localhost:3000");
     ws = new WebSocket("wss://api.htl-horcher.at");
-    ws.binaryType = "arraybuffer";
+    ws.binaryType = "arraybuffer";    // Binärdaten als ArrayBuffer empfangen
 
+    // Verbindung offen -> beim Server anmelden
     ws.onopen = () => {
-        console.log(`✅ WebSocket connected - requesting access to ${selectedESP}...`);
         connecting = false;
         reconnectAttempts = 0;
-        ws.send(`WEB_CONNECT:${selectedESP}`);
+        ws.send(`WEB_CONNECT:${selectedESP}`); // Handshake mit gewähltem ESP senden
     };
 
     ws.onmessage = (event) => {
-        // Handle connection status messages
+        
+        // --- Textnachrichten ---
         if (typeof event.data === "string") {
+            
             if (event.data.startsWith("CONNECTION_ACCEPTED")) {
+                // Verbindung akzeptiert -> UI aktualisieren
                 connectionAccepted = true;
                 const espId = event.data.split(":")[1];
-                console.log(`✅ Connection accepted - connected to ${espId}`);
-                
-                
-                // Update the displayed device name in sidebar
                 if (typeof window.updateDeviceDisplay === "function") {
                     window.updateDeviceDisplay(espId);
                 }
@@ -67,25 +55,18 @@ function connectBackend() {
             }
             
             if (event.data.startsWith("CONNECTION_REJECTED")) {
+                // ESP abgelehnt -> nach 3s zurück zur Auswahlseite
                 connectionAccepted = false;
-                const reason = event.data.split(":")[1];
-                console.error("❌ Connection rejected:", reason);
-                
-                
                 setTimeout(() => {
                     window.location.href = "device-selection.html";
                 }, 3000);
                 return;
             }
 
-            if (event.data.startsWith("ERROR:")) {
-                console.error("❌ Error:", event.data);
-                return;
-            }
+            if (event.data.startsWith("ERROR:")) return; // Serverfehler -> ignorieren
             
-            // TEXT message from ESP
+            // Normale Textnachricht vom ESP im Chat anzeigen
             if (connectionAccepted) {
-                console.log("📩 Text:", event.data);
                 if (typeof window.addAssistantMessage === "function") {
                     window.addAssistantMessage(event.data);
                 }
@@ -93,130 +74,100 @@ function connectBackend() {
             return;
         }
 
-        // Only process binary if connection is accepted
-        if (!connectionAccepted) return;
+        if (!connectionAccepted) return; // Binärdaten nur verarbeiten wenn Verbindung aktiv
 
-        // BINARY message (image or audio)
+        // Binärdaten in lesbares Byte-Array umwandeln
         const buf = new Uint8Array(event.data);
-        if (buf.length === 0) return;
-        
-        const type = buf[0];
-        const payload = buf.slice(1);
+        if (buf.length === 0) return;                // Leere Nachricht ignorieren
+
+        const type = buf[0];          // Erstes Byte = Frame-Typ
+        const payload = buf.slice(1); // Rest = Nutzdaten ohne Frame-Typ
 
         if (type === 0x03) {
-            handleImageChunk(payload);
-        } else if (type === 0x02) {
-            handleAudioChunk(payload);
+            handleImageChunk(payload); // Bild-Chunk an Handler weitergeben
+        } else if (type === 0x05) {
+            handleAudioChunk(payload); // Audio-Chunk an Handler weitergeben
         }
     };
 
+    // Verbindung getrennt -> Zustand zurücksetzen und Reconnect starten
     ws.onclose = (event) => {
-        console.warn("❌ Disconnected - Code:", event.code, "Reason:", event.reason);
         ws = null;
         connecting = false;
         connectionAccepted = false;
-        
-        // Clear buffers on disconnect
         imageChunks = [];
         audioChunks = [];
         
-        // Only auto-reconnect on unexpected disconnections
+        // Unerwarteter Abbruch -> Reconnect mit ansteigender Wartezeit
+        // Wartezeit = min(reconnectAttempts * 1000ms, 5000ms)
         if (event.code !== 1000 && event.code !== 1001) {
-            
-            
             reconnectAttempts++;
             const delay = Math.min(1000 * reconnectAttempts, MAX_RECONNECT_DELAY);
-            
-            console.log(`🔄 Reconnecting in ${delay}ms (attempt ${reconnectAttempts})...`);
-            
             clearTimeout(reconnectTimer);
             reconnectTimer = setTimeout(() => {
                 connectBackend();
             }, delay);
-        } else {
-            
-            console.log("Normal disconnect - not reconnecting");
         }
     };
 
+    // Verbindungsfehler -> Flags zurücksetzen (onclose wird danach automatisch aufgerufen)
     ws.onerror = (error) => {
-        console.error("🔴 WebSocket error:", error);
         connecting = false;
         connectionAccepted = false;
     };
 }
 
-/* =====================================================
-   CONNECTION STATUS UI
-   ===================================================== */
-
-
-
-/* =====================================================
-   SENDING
-   ===================================================== */
-
+//SENDEN
+// Einfache Textnachricht senden
 function sendText(text) {
-    if (!ws || ws.readyState !== WebSocket.OPEN || !connectionAccepted) {
-        console.warn("⚠️ Not connected or access denied");
-        return false;
-    }
+    if (!ws || ws.readyState !== WebSocket.OPEN || !connectionAccepted) return false;
     ws.send(text);
-    console.log("📤 Sent text:", text);
     return true;
 }
 
+// Bilddatei in 1024-Byte-Chunks senden
 async function sendImage(file) {
-    if (!ws || ws.readyState !== WebSocket.OPEN || !connectionAccepted) {
-        console.warn("⚠️ Cannot send image - not connected");
-        return false;
-    }
+    if (!ws || ws.readyState !== WebSocket.OPEN || !connectionAccepted) return false;
 
-    const CHUNK_SIZE = 1024;
-    const arrayBuffer = await file.arrayBuffer();
-    const totalBytes = arrayBuffer.byteLength;
-    let offset = 0;
-
-    console.log("📤 Sending image:", totalBytes, "bytes");
+    const CHUNK_SIZE = 1024;                          // Maximale Chunk-Größe in Bytes
+    const arrayBuffer = await file.arrayBuffer();     // Bilddatei komplett in Speicher laden
+    const totalBytes = arrayBuffer.byteLength;        // Gesamtgröße des Bildes
+    let offset = 0;                                   // Aktuelle Position im Bild
 
     while (offset < totalBytes) {
-        const end = Math.min(offset + CHUNK_SIZE, totalBytes);
-        const chunk = arrayBuffer.slice(offset, end);
-        
+        const end = Math.min(offset + CHUNK_SIZE, totalBytes); // Ende des aktuellen Chunks
+        const chunk = arrayBuffer.slice(offset, end);          // Chunk ausschneiden
+
+        // Frame zusammenbauen: [Type][Chunk-Daten]
         const frame = new Uint8Array(1 + chunk.byteLength);
-        frame[0] = 0x03; // Image type
-        frame.set(new Uint8Array(chunk), 1);
+        frame[0] = 0x03;                               // Frame-Typ: Bild
+        frame.set(new Uint8Array(chunk), 1);           // Chunk-Daten ab Byte 1 einfügen
         
-        ws.send(frame.buffer);
-        offset = end;
-        await new Promise(resolve => setTimeout(resolve, 10));
+        ws.send(frame.buffer);                         // Frame senden
+        offset = end;                                  // Zeiger weiterrücken
+        await new Promise(resolve => setTimeout(resolve, 10)); // 10ms Pause -> Empfänger entlasten
     }
 
-    // Send end marker
-    ws.send(new Uint8Array([0x03]).buffer);
-    console.log("✅ Image sent completely");
+    ws.send(new Uint8Array([0x03]).buffer); // Leerer Abschluss-Frame -> Ende der Übertragung
     return true;
 }
 
+// Audiodatei in 1024-Byte-Chunks senden (identisches Prinzip wie sendImage)
 async function sendAudio(blob) {
-    if (!ws || ws.readyState !== WebSocket.OPEN || !connectionAccepted) {
-        console.warn("⚠️ Cannot send audio - not connected");
-        return false;
-    }
+    if (!ws || ws.readyState !== WebSocket.OPEN || !connectionAccepted) return false;
 
     const CHUNK_SIZE = 1024;
     const arrayBuffer = await blob.arrayBuffer();
     const totalBytes = arrayBuffer.byteLength;
     let offset = 0;
 
-    console.log("📤 Sending audio:", totalBytes, "bytes");
-
     while (offset < totalBytes) {
         const end = Math.min(offset + CHUNK_SIZE, totalBytes);
         const chunk = arrayBuffer.slice(offset, end);
         
+        // Frame zusammenbauen: [Type][Chunk-Daten]
         const frame = new Uint8Array(1 + chunk.byteLength);
-        frame[0] = 0x02; // Audio type
+        frame[0] = 0x05; // Frame-Typ: Audio
         frame.set(new Uint8Array(chunk), 1);
         
         ws.send(frame.buffer);
@@ -224,33 +175,21 @@ async function sendAudio(blob) {
         await new Promise(resolve => setTimeout(resolve, 10));
     }
 
-    // Send end marker
-    ws.send(new Uint8Array([0x02]).buffer);
-    console.log("✅ Audio sent completely");
+    ws.send(new Uint8Array([0x05]).buffer); // Leerer Abschluss-Frame -> Ende der Übertragung
     return true;
 }
 
-/* =====================================================
-   RECEIVING - CRITICAL FIX
-   ===================================================== */
-
+//EMPFANGEN
+// Eingehende Bild-Chunks puffern; leerer Payload = Bild zusammensetzen und im Chat anzeigen
 function handleImageChunk(payload) {
-    // End marker (empty payload)
+    
     if (payload.length === 0) {
-        if (imageChunks.length === 0) {
-            console.warn("⚠️ Received image end marker but no chunks buffered");
-            return;
-        }
+        if (imageChunks.length === 0) return;
 
-        console.log("🖼️ Assembling image from", imageChunks.length, "chunks");
-
-        // Create blob from chunks
+        // Alle Chunks zu einem Blob zusammensetzen und als Bild anzeigen
         const blob = new Blob(imageChunks, { type: "image/jpeg" });
         const url = URL.createObjectURL(blob);
 
-        console.log("🖼️ Image blob size:", blob.size, "bytes");
-
-        // Create message element
         const messageDiv = document.createElement("div");
         messageDiv.className = "message assistant-message";
         
@@ -261,12 +200,6 @@ function handleImageChunk(payload) {
         img.src = url;
         img.style.maxWidth = "100%";
         img.style.borderRadius = "12px";
-        img.onerror = () => {
-            console.error("❌ Failed to load image");
-        };
-        img.onload = () => {
-            console.log("✅ Image loaded successfully");
-        };
         
         contentDiv.appendChild(img);
         messageDiv.appendChild(contentDiv);
@@ -274,31 +207,23 @@ function handleImageChunk(payload) {
         const messagesContainer = document.querySelector(".chat-messages");
         if (messagesContainer) {
             messagesContainer.appendChild(messageDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            messagesContainer.scrollTop = messagesContainer.scrollHeight; // Zum neuesten Eintrag scrollen
         }
 
-        // Clear chunks for next image
-        imageChunks = [];
-        console.log("✅ Image displayed, chunks cleared");
+        imageChunks = []; // Puffer leeren
         return;
     }
 
-    // Data chunk - store as ArrayBuffer
-    const chunk = new Uint8Array(payload);
-    imageChunks.push(chunk);
-    console.log("📦 Image chunk received:", chunk.length, "bytes (total chunks:", imageChunks.length, ")");
+    imageChunks.push(new Uint8Array(payload)); // Chunk in Puffer speichern
 }
 
+// Eingehende Audio-Chunks puffern; leerer Payload = Audio zusammensetzen und im Chat anzeigen
 function handleAudioChunk(payload) {
-    // End marker (empty payload)
+    
     if (payload.length === 0) {
-        if (audioChunks.length === 0) {
-            console.warn("⚠️ Received audio end marker but no chunks buffered");
-            return;
-        }
+        if (audioChunks.length === 0) return;
 
-        console.log("🔊 Assembling audio from", audioChunks.length, "chunks");
-
+        // Alle Chunks zu einem Blob zusammensetzen und als Audio anzeigen
         const blob = new Blob(audioChunks, { type: "audio/webm" });
         const url = URL.createObjectURL(blob);
 
@@ -312,7 +237,6 @@ function handleAudioChunk(payload) {
         audio.src = url;
         audio.controls = true;
         audio.style.maxWidth = "100%";
-        audio.style.borderRadius = "8px";
         
         contentDiv.appendChild(audio);
         messageDiv.appendChild(contentDiv);
@@ -320,28 +244,20 @@ function handleAudioChunk(payload) {
         const messagesContainer = document.querySelector(".chat-messages");
         if (messagesContainer) {
             messagesContainer.appendChild(messageDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            messagesContainer.scrollTop = messagesContainer.scrollHeight; // Zum neuesten Eintrag scrollen
         }
 
-        // Clear chunks for next audio
-        audioChunks = [];
-        console.log("✅ Audio displayed, chunks cleared");
+        audioChunks = []; // Puffer leeren
         return;
     }
 
-    // Data chunk
-    const chunk = new Uint8Array(payload);
-    audioChunks.push(chunk);
-    console.log("📦 Audio chunk received:", chunk.length, "bytes (total chunks:", audioChunks.length, ")");
+    audioChunks.push(new Uint8Array(payload)); // Chunk in Puffer speichern
 }
 
-/* =====================================================
-   INITIALIZATION
-   ===================================================== */
+// INITIALISIERUNG
+window.addEventListener("load", connectBackend); // Verbindung beim Seitenload starten
 
-window.addEventListener("load", connectBackend);
-
-// Export functions
+// Sendefunktionen global verfügbar machen
 window.sendText = sendText;
 window.sendImage = sendImage;
 window.sendAudio = sendAudio;
